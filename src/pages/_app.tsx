@@ -1,8 +1,11 @@
+import { Desktop } from "@/components/Desktop";
+import { MediaQuery } from "@/hooks/mediaQuery";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
 export default function App({ Component, pageProps }: any) {
+    const isMobile = MediaQuery();
     return (
         <>
             <Head>
@@ -11,7 +14,8 @@ export default function App({ Component, pageProps }: any) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Component {...pageProps} />
+
+            {isMobile ? <Component {...pageProps} /> : <Desktop />}
         </>
     );
 }
