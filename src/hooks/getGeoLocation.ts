@@ -1,4 +1,4 @@
-export const getLocation = () => {
+export const getGeoLocation = () => {
     console.log("execute");
     const options = {
         enableHighAccuracy: false,
