@@ -1,4 +1,3 @@
-import { getLocation } from "@/hooks/getLocation";
 import { css } from "@emotion/react";
 import { BottomSheet } from "@qve-ui/qds";
 import Image from "next/image";
