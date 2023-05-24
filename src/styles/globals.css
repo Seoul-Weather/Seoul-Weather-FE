@@ -22,8 +22,9 @@ body {
 }
 
 body {
+    /*ios height 조정*/
     @supports (-webkit-touch-callout: none) {
-        height: -webkit-fill-available;
+        min-height: -webkit-fill-available;
     }
 }
 
@@ -53,4 +54,9 @@ h6 {
 #root,
 #__next {
     isolation: isolate;
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }
