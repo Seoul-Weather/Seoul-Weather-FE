@@ -63,48 +63,44 @@ export default function Join() {
             setIsSheet(true);
         }
     };
-
-    useEffect(() => {
-        if (isPush) {
-            nameInput.current && nameInput.current.setAttribute("disabled", "");
-        } else {
-            nameInput.current && nameInput.current.removeAttribute("disabled");
-        }
-    }, [isPush]);
-
     return (
         <div css={container}>
-            <form css={isPush ? pushForm : nameForm} onSubmit={onSubmit}>
-                <div css={inputWrapper}>
-                    {isPush ? null : (
+            <form css={nameForm} onSubmit={onSubmit}>
+                {isPush ? (
+                    <div css={inputWrapper}>
+                        <label css={pushNameLabel} htmlFor="nickname">
+                            이름
+                        </label>
+                        <input css={nicknameInput} ref={nameInput} type="text" name="nickname" onChange={onChange} value={nickname} placeholder="김상민" required disabled />
+                        <section>
+                            <Notification />
+                        </section>
+                        <div css={notiText}>알림 시간 설정</div>
+                        <div css={timeWrapper}>
+                            <div>
+                                <input css={timeInput} type="number" name="hour" onChange={onChange} placeholder="8" value={hour} maxLength={2} max="23" min="0" />
+                                <span>시</span>
+                            </div>
+                            <div>
+                                <input css={timeInput} type="number" name="minute" onChange={onChange} placeholder="0" value={minute} max="59" min="0" />
+                                <span>분</span>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div css={inputWrapper}>
                         <h2 css={formText}>
                             이름을 <br />
                             입력해주세요
                         </h2>
-                    )}
-                    <label css={nameLabel} htmlFor="nickname">
-                        이름
-                    </label>
-                    <input css={nicknameInput} ref={nameInput} type="text" name="nickname" onChange={onChange} value={nickname} placeholder="김상민" required disabled />
-                    {isPush ? (
-                        <div>
-                            <section>
-                                <Notification />
-                            </section>
-                            <div css={notiText}>알림 시간 설정</div>
-                            <div css={timeWrapper}>
-                                <div>
-                                    <input css={timeInput} type="number" name="hour" onChange={onChange} placeholder="8" value={hour} maxLength={2} max="23" min="0" />
-                                    <span>시</span>
-                                </div>
-                                <div>
-                                    <input css={timeInput} type="number" name="minute" onChange={onChange} placeholder="0" value={minute} max="59" min="0" />
-                                    <span>분</span>
-                                </div>
-                            </div>
-                        </div>
-                    ) : null}
-                </div>
+                        <label css={nameLabel} htmlFor="nickname">
+                            이름
+                        </label>
+                        <input css={nicknameInput} ref={nameInput} type="text" name="nickname" onChange={onChange} value={nickname} placeholder="김상민" required />
+                    </div>
+                )}
+
+                {isPush ? <div></div> : null}
 
                 <SubmitButton />
             </form>
@@ -157,6 +153,12 @@ const formText = css`
 const nameLabel = css`
     font-size: ${theme.fontSize.small};
     color: ${theme.color.grey};
+`;
+
+const pushNameLabel = css`
+    font-size: ${theme.fontSize.small};
+    color: ${theme.color.grey};
+    margin-top: 10%;
 `;
 
 const nicknameInput = css`
