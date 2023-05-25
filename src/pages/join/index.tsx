@@ -1,4 +1,5 @@
 import { AuthBottomSheet } from "@/components/AuthBottomSheet";
+import { Notification, notiText } from "@/components/Notification";
 import { SubmitButton } from "@/components/SubmitButton";
 
 import { theme } from "@/styles/theme";
@@ -36,6 +37,17 @@ export default function Join() {
             setHour(value === "" ? 0 : parseFloat(value.toString()));
             // Number(value.toString().replace(/(^0+)/, ""))
         } else if (name === "minute") {
+            if (value.toString().length > 1 && value[0] === "0") {
+                value = Number(value.toString().slice(1));
+            }
+
+            if (value.toString().length > 2) {
+                value = Number(value.toString().slice(0, 2));
+            }
+
+            if (+value > 59) {
+                value = 59;
+            }
             setMinute(+value);
         }
     };
@@ -62,36 +74,38 @@ export default function Join() {
 
     return (
         <div css={container}>
-            <form css={nameForm} onSubmit={onSubmit}>
+            <form css={isPush ? pushForm : nameForm} onSubmit={onSubmit}>
                 <div css={inputWrapper}>
-                    <h2 css={formText}>
-                        이름을 <br />
-                        입력해주세요
-                    </h2>
+                    {isPush ? null : (
+                        <h2 css={formText}>
+                            이름을 <br />
+                            입력해주세요
+                        </h2>
+                    )}
                     <label css={nameLabel} htmlFor="nickname">
                         이름
                     </label>
                     <input css={nicknameInput} ref={nameInput} type="text" name="nickname" onChange={onChange} value={nickname} placeholder="김상민" required disabled />
+                    {isPush ? (
+                        <div>
+                            <section>
+                                <Notification />
+                            </section>
+                            <div css={notiText}>알림 시간 설정</div>
+                            <div css={timeWrapper}>
+                                <div>
+                                    <input css={timeInput} type="number" name="hour" onChange={onChange} placeholder="8" value={hour} maxLength={2} max="23" min="0" />
+                                    <span>시</span>
+                                </div>
+                                <div>
+                                    <input css={timeInput} type="number" name="minute" onChange={onChange} placeholder="0" value={minute} max="59" min="0" />
+                                    <span>분</span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : null}
                 </div>
-                {isPush ? (
-                    <div>
-                        <section>
-                            <div>
-                                <Image src="" alt="locationIcon" />
-                                <span>위치</span>
-                                <span>현재 위치의 날씨를 알려드릴게요.</span>
-                            </div>
-                            <div>
-                                <Image src="" alt="alertIcon" />
-                                <span>알림</span>
-                                <span>설정한 시간마다 준비물을 알려드릴게요.</span>
-                            </div>
-                        </section>
-                        <label htmlFor="hour">시간</label>
-                        <input type="number" name="hour" onChange={onChange} placeholder="8" value={hour} maxLength={2} max="23" min="0" />
-                        <input type="number" name="minute" onChange={onChange} placeholder="0" value={minute} max="59" min="0" />
-                    </div>
-                ) : null}
+
                 <SubmitButton />
             </form>
             <AuthBottomSheet isSheet={isSheet} setIsSheet={setIsSheet} setIsPush={setIsPush} />
@@ -114,6 +128,15 @@ const nameForm = css`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+`;
+
+const pushForm = css`
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 5%;
 `;
 
 const inputWrapper = css`
@@ -143,5 +166,26 @@ const nicknameInput = css`
     font-size: 20px;
     &:focus {
         border-bottom: 2px solid ${theme.color.primary_dark};
+    }
+    background-color: transparent;
+`;
+
+const timeWrapper = css`
+    height: fit-content;
+    width: 100%;
+    border-bottom: 2px solid ${theme.color.primary_dark};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: ${theme.fontSize.medium};
+    padding: 3px 0;
+    gap: 25%;
+`;
+
+const timeInput = css`
+    border: none;
+    color: ${theme.color.grey};
+    &:focus {
+        color: black;
     }
 `;
