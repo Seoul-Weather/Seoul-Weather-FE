@@ -1,9 +1,9 @@
 export const theme = {
     color: {
-        primary: "#006B6C",
-        primary_light: "#02A2AF",
+        primary: "#a39089",
+        primary_dark: "#7B5F56",
         bgColor: "#f9f9f9",
-        grey: "#6c6f70",
+        grey: "#B0B0B0",
         grey_light: "#cccccc",
         white: "#ffffff",
         black: "#000000",
@@ -11,8 +11,9 @@ export const theme = {
     fontSize: {
         h1: "40px",
         h2: "32px",
+        h3: "28px",
         large: "24px",
-        medium: "18px",
+        medium: "20px",
         regular: "16px",
         small: "14px",
         tiny: "12px",

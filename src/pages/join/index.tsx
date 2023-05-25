@@ -1,5 +1,7 @@
 import { AuthBottomSheet } from "@/components/AuthBottomSheet";
+import { SubmitButton } from "@/components/SubmitButton";
 import { getGeoLocation } from "@/hooks/getGeoLocation";
+import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -62,15 +64,18 @@ export default function Join() {
     return (
         <div css={container}>
             <form css={nameForm} onSubmit={onSubmit}>
-                <h2 css={formText}>
-                    이름을 <br />
-                    입력해주세요
-                </h2>
-                <label htmlFor="nickname">이름</label>
-                <input ref={nameInput} type="text" name="nickname" onChange={onChange} value={nickname} placeholder="김상민" required disabled />
+                <div css={inputWrapper}>
+                    <h2 css={formText}>
+                        이름을 <br />
+                        입력해주세요
+                    </h2>
+                    <label css={nameLabel} htmlFor="nickname">
+                        이름
+                    </label>
+                    <input css={nicknameInput} ref={nameInput} type="text" name="nickname" onChange={onChange} value={nickname} placeholder="김상민" required disabled />
+                </div>
                 {isPush ? (
                     <div>
-                        {" "}
                         <section>
                             <div>
                                 <Image src="" alt="locationIcon" />
@@ -88,7 +93,7 @@ export default function Join() {
                         <input type="number" name="minute" onChange={onChange} placeholder="0" value={minute} max="59" min="0" />
                     </div>
                 ) : null}
-                <button type="submit">확인</button>
+                <SubmitButton />
             </form>
             <AuthBottomSheet isSheet={isSheet} setIsSheet={setIsSheet} setIsPush={setIsPush} />
         </div>
@@ -112,6 +117,32 @@ const nameForm = css`
     justify-content: space-between;
 `;
 
+const inputWrapper = css`
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+`;
+
 const formText = css`
     width: 100%;
+    margin: 40px 0;
+    font-size: ${theme.fontSize.h3};
+    font-weight: 500;
+`;
+
+const nameLabel = css`
+    font-size: ${theme.fontSize.small};
+    color: ${theme.color.grey};
+`;
+
+const nicknameInput = css`
+    height: 48px;
+    border: none;
+    border-bottom: 2px solid ${theme.color.primary};
+    font-size: 20px;
+    &:focus {
+        border-bottom: 2px solid ${theme.color.primary_dark};
+    }
 `;
