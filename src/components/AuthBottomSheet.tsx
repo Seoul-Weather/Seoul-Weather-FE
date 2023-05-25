@@ -5,6 +5,7 @@ import spotIcon from "@/assets/spotIcon.svg";
 import notiIcon from "@/assets/notiIcon.svg";
 import { SubmitButton } from "./SubmitButton";
 import { theme } from "@/styles/theme";
+import { getGeoLocation } from "@/hooks/getGeoLocation";
 
 interface IProps {
     isSheet: boolean;
@@ -14,6 +15,7 @@ interface IProps {
 
 export const AuthBottomSheet = ({ isSheet, setIsSheet, setIsPush }: IProps) => {
     const onClick = () => {
+        getGeoLocation();
         setIsPush(true);
         setIsSheet(false);
     };

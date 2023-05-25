@@ -1,6 +1,6 @@
 import { AuthBottomSheet } from "@/components/AuthBottomSheet";
 import { SubmitButton } from "@/components/SubmitButton";
-import { getGeoLocation } from "@/hooks/getGeoLocation";
+
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";
@@ -49,7 +49,6 @@ export default function Join() {
         } else {
             window.localStorage.setItem("name", nickname);
             setIsSheet(true);
-            getGeoLocation();
         }
     };
 
