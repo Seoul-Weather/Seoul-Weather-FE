@@ -61,6 +61,7 @@ export default function Join() {
         } else {
             window.localStorage.setItem("name", nickname);
             setIsSheet(true);
+            setIsPush(true);
         }
     };
     return (
@@ -100,11 +101,9 @@ export default function Join() {
                     </div>
                 )}
 
-                {isPush ? <div></div> : null}
-
                 <SubmitButton />
             </form>
-            <AuthBottomSheet isSheet={isSheet} setIsSheet={setIsSheet} setIsPush={setIsPush} />
+            {isPush ? <AuthBottomSheet isSheet={isSheet} setIsSheet={setIsSheet} setIsPush={setIsPush} /> : null}
         </div>
     );
 }
