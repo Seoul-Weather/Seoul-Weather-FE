@@ -3,6 +3,7 @@ import { MediaQuery } from "@/hooks/mediaQuery";
 import "@/styles/globals.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useState } from "react";
@@ -19,7 +20,9 @@ export default function App({ Component, pageProps }: any) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <QueryClientProvider client={queryClient}>{isMobile ? <Component {...pageProps} /> : <Desktop />}</QueryClientProvider>
+            <QueryClientProvider client={queryClient}>
+                {isMobile ? <Component {...pageProps} /> : <Desktop />} <ReactQueryDevtools initialIsOpen={true} />
+            </QueryClientProvider>
         </>
     );
 }

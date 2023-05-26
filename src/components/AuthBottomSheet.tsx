@@ -2,8 +2,9 @@ import { css } from "@emotion/react";
 import { BottomSheet } from "@qve-ui/qds";
 import { SubmitButton } from "./SubmitButton";
 import { theme } from "@/styles/theme";
-import { getGeoLocation } from "@/hooks/getGeoLocation";
 import { Notification, notiText } from "./Notification";
+import { useQuery } from "@tanstack/react-query";
+import { CoordsData, getCoordinates, getLocation } from "@/hooks/api";
 
 interface IProps {
     isSheet: boolean;
@@ -12,9 +13,26 @@ interface IProps {
 }
 
 export const AuthBottomSheet = ({ isSheet, setIsSheet, setIsPush }: IProps) => {
+    const {
+        data: coordsData,
+        isLoading: coordsLoading,
+        isError: coordsError,
+    } = useQuery<any>({
+        queryKey: ["coordinates"],
+        queryFn: getCoordinates,
+    });
+
+    const {
+        data: locationData,
+        isLoading: locationLoading,
+        isError: locationError,
+    } = useQuery({
+        queryKey: ["location"],
+        queryFn: () => getLocation(coordsData),
+        enabled: !!coordsData,
+    });
+    console.log(locationData.documents[0].region_2depth_name);
     const onClick = () => {
-        getGeoLocation();
-        setIsPush(true);
         setIsSheet(false);
     };
     return (
