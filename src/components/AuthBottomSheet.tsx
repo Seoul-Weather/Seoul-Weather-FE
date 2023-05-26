@@ -3,7 +3,8 @@ import { BottomSheet } from "@qve-ui/qds";
 import { SubmitButton } from "./SubmitButton";
 import { theme } from "@/styles/theme";
 import { Notification, notiText } from "./Notification";
-import { useSetLocation } from "@/hooks/useSetLocation";
+import { useQuery } from "@tanstack/react-query";
+import { getCoordinates, getLocation } from "@/hooks/api";
 
 interface IProps {
     isSheet: boolean;
@@ -11,10 +12,21 @@ interface IProps {
 }
 
 export const AuthBottomSheet = ({ isSheet, setIsSheet }: IProps) => {
-    useSetLocation();
+    const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
+        queryKey: ["coordinates"],
+        queryFn: getCoordinates,
+    });
+
+    const { data: locationData, isLoading: locationLoading } = useQuery({
+        queryKey: ["location"],
+        queryFn: () => getLocation(coordsData),
+        enabled: !!coordsData,
+    });
+
     const onClick = () => {
         setIsSheet(false);
     };
+
     return (
         <BottomSheet isOpen={isSheet} onClose={() => setIsSheet(false)} xButton={false} ratio={60}>
             <div css={sheet}>

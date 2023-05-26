@@ -1,6 +1,4 @@
 import { css } from "@emotion/react";
-import spotIcon from "../../public/assets/spotIcon.svg";
-import notiIcon from "../../public/assets/notiIcon.svg";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
 
@@ -8,12 +6,12 @@ export const Notification = () => {
     return (
         <>
             <section css={textSection}>
-                <Image src={spotIcon} width={18} height={20} alt="locationIcon" />
+                <Image src={"/spotIcon.svg"} width={18} height={20} alt="locationIcon" />
                 <span css={notiTopic}>위치</span>
                 <span css={notiText}>현재 위치의 날씨를 알려드릴게요.</span>
             </section>
             <section css={textSection}>
-                <Image src={notiIcon} width={18} height={20} alt="alertIcon" />
+                <Image src={"/notiIcon.svg"} width={18} height={20} alt="alertIcon" />
                 <span css={notiTopic}>알림</span>
                 <span css={notiText}>설정한 시간마다 준비물을 알려드릴게요.</span>
             </section>

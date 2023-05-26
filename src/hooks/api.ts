@@ -14,7 +14,6 @@ export const getLocation = async (coordsData: CoordsData) => {
 };
 
 export const getCoordinates = () => {
-    console.log("execute");
     const options = {
         enableHighAccuracy: false,
         maximumAge: 0,
@@ -38,4 +37,9 @@ export const getCoordinates = () => {
             reject(new Error("Geolocation is not supported"));
         }
     });
+};
+
+export const getWeather = async () => {
+    const response = await fetch("http://localhost:4000/data");
+    return await response.json();
 };
