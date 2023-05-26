@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useState } from "react";
+import { RecoilRoot } from "recoil";
 
 export default function App({ Component, pageProps }: any) {
     const isMobile = MediaQuery();
@@ -21,7 +22,8 @@ export default function App({ Component, pageProps }: any) {
             </Head>
 
             <QueryClientProvider client={queryClient}>
-                {isMobile ? <Component {...pageProps} /> : <Desktop />} <ReactQueryDevtools initialIsOpen={true} />
+                <RecoilRoot>{isMobile ? <Component {...pageProps} /> : <Desktop />}</RecoilRoot>
+                <ReactQueryDevtools initialIsOpen={true} />
             </QueryClientProvider>
         </>
     );
