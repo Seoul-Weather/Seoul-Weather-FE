@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
-import spotIcon from "@/assets/spotIcon.svg";
-import notiIcon from "@/assets/notiIcon.svg";
+import spotIcon from "../../public/assets/spotIcon.svg";
+import notiIcon from "../../public/assets/notiIcon.svg";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
 
