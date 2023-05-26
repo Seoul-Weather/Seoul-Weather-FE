@@ -3,35 +3,15 @@ import { BottomSheet } from "@qve-ui/qds";
 import { SubmitButton } from "./SubmitButton";
 import { theme } from "@/styles/theme";
 import { Notification, notiText } from "./Notification";
-import { useQuery } from "@tanstack/react-query";
-import { CoordsData, getCoordinates, getLocation } from "@/hooks/api";
+import { useSetLocation } from "@/hooks/useSetLocation";
 
 interface IProps {
     isSheet: boolean;
     setIsSheet: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsPush: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AuthBottomSheet = ({ isSheet, setIsSheet, setIsPush }: IProps) => {
-    const {
-        data: coordsData,
-        isLoading: coordsLoading,
-        isError: coordsError,
-    } = useQuery<any>({
-        queryKey: ["coordinates"],
-        queryFn: getCoordinates,
-    });
-
-    const {
-        data: locationData,
-        isLoading: locationLoading,
-        isError: locationError,
-    } = useQuery({
-        queryKey: ["location"],
-        queryFn: () => getLocation(coordsData),
-        enabled: !!coordsData,
-    });
-    console.log(locationData.documents[0].region_2depth_name);
+export const AuthBottomSheet = ({ isSheet, setIsSheet }: IProps) => {
+    useSetLocation();
     const onClick = () => {
         setIsSheet(false);
     };

@@ -103,7 +103,7 @@ export default function Join() {
 
                 <SubmitButton />
             </form>
-            {isPush ? <AuthBottomSheet isSheet={isSheet} setIsSheet={setIsSheet} setIsPush={setIsPush} /> : null}
+            {isPush ? <AuthBottomSheet isSheet={isSheet} setIsSheet={setIsSheet} /> : null}
         </div>
     );
 }
