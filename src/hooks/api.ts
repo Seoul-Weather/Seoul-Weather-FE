@@ -12,7 +12,7 @@ export const getLocation = async ({ longitude, latitude }: Coordinates) => {
     return await response.json();
 };
 
-export const getGeoLocation = () => {
+export const getCoordinates = () => {
     console.log("execute");
     const options = {
         enableHighAccuracy: false,
