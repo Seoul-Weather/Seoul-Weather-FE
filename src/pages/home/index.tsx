@@ -99,22 +99,24 @@ export default function Home() {
                     weatherData && (
                         <article css={detailInfoBox}>
                             <article css={detailInfoSmallBox}>
-                                <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} />
-                                <Detail img="lowTemp" title="최저온도" value={weatherData.max_tmp} />
-                                <Detail img="humanTemp" title="체감온도" value={weatherData.temp} />
-                                <Detail img="uv" title="자외선지수" value={weatherData.uv} />
+                                <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} unit="℃" />
+                                <Detail img="lowTemp" title="최저온도" value={weatherData.max_tmp} unit="℃" />
+                                <Detail img="humanTemp" title="체감온도" value={weatherData.temp} unit="℃" />
+                                <Detail img="uv" title="자외선지수" value={weatherData.uv} unit="" />
                             </article>
+                            <hr css={hLine} />
                             <article css={detailInfoSmallBox}>
-                                <Detail img="sunUp" title="일출" value={weatherData.sunrise} />
-                                <Detail img="sunDown" title="일몰" value={weatherData.sunset} />
-                                <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre} />
-                                <Detail img="humidity" title="습도" value={weatherData.humiditiy} />
+                                <Detail img="sunUp" title="일출" value={weatherData.sunrise} unit="" />
+                                <Detail img="sunDown" title="일몰" value={weatherData.sunset} unit="" />
+                                <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre} unit="mm" />
+                                <Detail img="humidity" title="습도" value={weatherData.humiditiy} unit="%" />
                             </article>
+                            <hr css={hLine} />
                             <article css={detailInfoSmallBox}>
-                                <Detail img="pm" title="미세먼지" value={weatherData.pm10} />
-                                <Detail img="pm" title="초미세먼지" value={weatherData.pm25} />
-                                <Detail img="sand" title="황사지수" value="좋음" />
-                                <Detail img="wind" title="풍속" value={weatherData.wind} />
+                                <Detail img="pm" title="미세먼지" value={weatherData.pm10} unit="ppm" />
+                                <Detail img="pm" title="초미세먼지" value={weatherData.pm25} unit="ppm" />
+                                <Detail img="sand" title="황사지수" value="좋음" unit="" />
+                                <Detail img="wind" title="풍속" value={weatherData.wind} unit="m/s" />
                             </article>
                         </article>
                     )
@@ -301,6 +303,9 @@ const character = css`
 const detailContainer = css`
     width: 100vw;
     background-color: ${theme.color.white};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const detailInfoBox = css`
@@ -308,16 +313,24 @@ const detailInfoBox = css`
     height: 500px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     border: none;
     border-radius: 10px;
     background-color: white;
+    margin: 7% 0;
+`;
+
+const hLine = css`
+    height: 0px;
+    width: 90%;
+    border: none;
+    border-bottom: 0.5px solid ${theme.color.grey_light};
 `;
 
 const detailInfoSmallBox = css`
-    width: 98%;
+    width: 93%;
     height: 33%;
-    display: grid;
-    grid-template-columns: repeat(2, 50%);
-
-    border-bottom: 1px solid ${theme.color.grey_light};
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 `;

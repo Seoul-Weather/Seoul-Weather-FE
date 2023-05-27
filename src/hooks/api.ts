@@ -49,7 +49,7 @@ export const getSpot = async (gu: string) => {
     return await response.json();
 };
 
-export const getTemp = async () => {
-    const response = await fetch("http://43.201.11.125:5001/user/event/동작구");
+export const getTemp = async (gu: string) => {
+    const response = await fetch(`http://43.201.11.125:5001/user/precpt/${gu}`);
     return await response.json();
 };
