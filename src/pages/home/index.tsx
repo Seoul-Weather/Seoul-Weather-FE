@@ -1,16 +1,33 @@
 import { css } from "@emotion/react";
 import Link from "next/link";
-
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
-import { getCoordinates, getLocation, getWeather } from "@/hooks/api";
-import { useRecoilValue } from "recoil";
-import { locationState } from "@/utils/atom";
+import { getCoordinates, getLocation, getTemp, getWeather } from "@/hooks/api";
 import { theme } from "@/styles/theme";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { Chart } from "@/components/Chart";
+import ApexChart from "react-apexcharts";
+import { Detail } from "@/components/Detail";
+// import { useEffect, useState } from "react";
+
+interface WeatherData {
+    gu: string;
+    temp: string;
+    sky_stts: string;
+    max_tmp: string;
+    min_tmp: string;
+    rain_pre: string;
+    pm10: string;
+    pm25: string;
+    wind: string;
+    sunset: string;
+    sunrise: string;
+    uv: string;
+    humiditiy: string;
+    item: string[];
+}
 
 export default function Home() {
+    // const [sky, setSky] = useState("sun");
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
@@ -22,19 +39,31 @@ export default function Home() {
         enabled: !!coordsData,
     });
 
-    const { isLoading: weatherLoading, data: weatherData } = useQuery({
+    const { isLoading: weatherLoading, data: weatherData } = useQuery<WeatherData>({
         queryKey: ["weather"],
         queryFn: () => getWeather(locationData.documents[0].region_2depth_name),
         enabled: !!locationData,
     });
 
+    const { isLoading: tempLoading, data: tempData } = useQuery({ queryKey: ["temperature"], queryFn: () => getTemp(locationData.documents[0].region_2depth_name), enabled: !!locationData });
+
     weatherData && console.log(weatherData);
+    tempData && console.log(tempData);
+    //    useEffect(() => {
+    //     if(weatherData?.rain_pre!=="-"){}
+    //    },[weatherData])
 
     return (
         <div css={wrapper}>
             <section css={mainContainer}>
                 <Image css={bgImage} src={"/background.svg"} alt="background" fill />
-                <Image css={weatherIcon} src={"/sun.svg"} alt="sun" width={90} height={90} />
+                {weatherLoading ? (
+                    <Image css={weatherIcon} src={"/맑음.svg"} alt="sun" width={90} height={90} />
+                ) : weatherData?.rain_pre === "-" ? (
+                    <Image css={weatherIcon} src={`/${weatherData?.sky_stts}.svg`} alt="sun" width={90} height={90} />
+                ) : (
+                    <Image css={weatherIcon} src={"/rain.svg"} alt="etc" width={90} height={90} />
+                )}
                 <div css={iconList}>
                     <button css={resetIcon}>
                         <Image src="/reset.svg" alt="설정" width={25} height={25} />
@@ -43,13 +72,15 @@ export default function Home() {
                         <Image css={settingIcon} src="/setting.svg" alt="설정" width={25} height={25} />
                     </Link>
                 </div>
-                {locationLoading ? (
-                    <div>불러오는 중..</div>
+                {weatherLoading ? (
+                    <>
+                        <div>불러오는 중..</div>
+                    </>
                 ) : (
                     <article css={weatherInfo}>
                         <span css={location}>{`서울특별시 ${locationData.documents[0].region_2depth_name}`}</span>
                         <h1 css={temperature}>
-                            {parseInt(weatherData.temp)}
+                            {weatherData && parseInt(weatherData.temp)}
                             <sup css={unit}>&deg;C</sup>
                         </h1>
                         <article css={itemList}>
@@ -62,9 +93,119 @@ export default function Home() {
                 <Image css={character} src="/man.svg" alt="설정" width={282} height={211} />
             </section>
             <section css={detailContainer}>
-                <article css={detailInfo}></article>
-                <article css={detailInfo}></article>
-                <article css={detailInfo}></article>
+                {weatherLoading ? (
+                    <div>loading..</div>
+                ) : (
+                    weatherData && (
+                        <article css={detailInfoBox}>
+                            <article css={detailInfoSmallBox}>
+                                <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} />
+                                <Detail img="lowTemp" title="최저온도" value={weatherData.max_tmp} />
+                                <Detail img="humanTemp" title="체감온도" value={weatherData.temp} />
+                                <Detail img="uv" title="자외선지수" value={weatherData.uv} />
+                            </article>
+                            <article css={detailInfoSmallBox}>
+                                <Detail img="sunUp" title="일출" value={weatherData.sunrise} />
+                                <Detail img="sunDown" title="일몰" value={weatherData.sunset} />
+                                <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre} />
+                                <Detail img="humidity" title="습도" value={weatherData.humiditiy} />
+                            </article>
+                            <article css={detailInfoSmallBox}>
+                                <Detail img="pm" title="미세먼지" value={weatherData.pm10} />
+                                <Detail img="pm" title="초미세먼지" value={weatherData.pm25} />
+                                <Detail img="sand" title="황사지수" value="좋음" />
+                                <Detail img="wind" title="풍속" value={weatherData.wind} />
+                            </article>
+                        </article>
+                    )
+                )}
+
+                <div>
+                    {/* <Chart location={{ tempLoading, tempData }} /> */}
+                    <div>
+                        {/* {tempLoading ? (
+                            "Loading chart..."
+                        ) : (
+
+                            <ApexChart
+                                type="bar"
+                                series={[
+                                    {
+                                        name: "sales",
+                                        data: [
+                                            {
+                                                x: "2019/01/01",
+                                                y: 400,
+                                            },
+                                            {
+                                                x: "2019/04/01",
+                                                y: 430,
+                                            },
+                                            {
+                                                x: "2019/07/01",
+                                                y: 448,
+                                            },
+                                            {
+                                                x: "2019/10/01",
+                                                y: 470,
+                                            },
+                                            {
+                                                x: "2020/01/01",
+                                                y: 540,
+                                            },
+                                            {
+                                                x: "2020/04/01",
+                                                y: 580,
+                                            },
+                                            {
+                                                x: "2020/07/01",
+                                                y: 690,
+                                            },
+                                            {
+                                                x: "2020/10/01",
+                                                y: 690,
+                                            },
+                                        ],
+                                    },
+                                ]}
+                                options={{
+                                    chart: {
+                                        type: "bar",
+                                        height: 380,
+                                    },
+                                    xaxis: {
+                                        type: "category",
+                                        // labels: {
+                                        //     formatter: function (val) {
+                                        //         return "Q" + dayjs(val).quarter();
+                                        //     },
+                                        // },
+                                        group: {
+                                            style: {
+                                                fontSize: "10px",
+                                                fontWeight: 700,
+                                            },
+                                            groups: [
+                                                { title: "2019", cols: 4 },
+                                                { title: "2020", cols: 4 },
+                                            ],
+                                        },
+                                    },
+                                    title: {
+                                        text: "Grouped Labels on the X-axis",
+                                    },
+                                    // tooltip: {
+                                    //     x: {
+                                    //         formatter: function (val) {
+                                    //             return "Q" + dayjs(val).quarter() + " " + dayjs(val).format("YYYY");
+                                    //         },
+                                    //     },
+                                    // },
+                                }}
+                            />
+                        )} */}
+                    </div>
+                </div>
             </section>
         </div>
     );
@@ -159,8 +300,24 @@ const character = css`
 
 const detailContainer = css`
     width: 100vw;
-    height: 100vh;
     background-color: ${theme.color.white};
 `;
 
-const detailInfo = css``;
+const detailInfoBox = css`
+    width: 90%;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    border: none;
+    border-radius: 10px;
+    background-color: white;
+`;
+
+const detailInfoSmallBox = css`
+    width: 98%;
+    height: 33%;
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+
+    border-bottom: 1px solid ${theme.color.grey_light};
+`;
