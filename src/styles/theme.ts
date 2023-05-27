@@ -5,7 +5,8 @@ export const theme = {
         bgColor: "#f9f9f9",
         grey: "#B0B0B0",
         grey_light: "#cccccc",
-        white: "#ffffff",
+        grey_dark: "#6E6E6E",
+        white: "#F5F5F5",
         black: "#000000",
     },
     fontSize: {

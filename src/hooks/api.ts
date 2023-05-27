@@ -43,3 +43,8 @@ export const getWeather = async () => {
     const response = await fetch("http://localhost:4000/data");
     return await response.json();
 };
+
+export const getSpot = async () => {
+    const response = await fetch("http://localhost:4000/spot");
+    return await response.json();
+};
