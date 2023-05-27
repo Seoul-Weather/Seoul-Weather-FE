@@ -1,4 +1,4 @@
-import { getSpot } from "@/hooks/api";
+import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
 import { theme } from "@/styles/theme";
 import { locationState } from "@/utils/atom";
 import { css } from "@emotion/react";
@@ -15,19 +15,26 @@ interface IData {
 }
 
 export default function Hot() {
-    const gu = useRecoilValue(locationState);
-    console.log(gu);
-    const router = useRouter();
-    const { data, isLoading } = useQuery<any>({
-        queryKey: ["hotSpot"],
-        queryFn: () => getSpot(gu),
+    const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
+        queryKey: ["coordinates"],
+        queryFn: getCoordinates,
+        staleTime: Infinity,
     });
 
-    useEffect(() => {
-        if (gu === "") {
-            router.push("/");
-        }
-    }, []);
+    const { data: locationData, isLoading: locationLoading } = useQuery({
+        queryKey: ["location"],
+        queryFn: () => getLocation(coordsData),
+        enabled: !!coordsData,
+        select: (location) => location.documents[0].region_2depth_name,
+        staleTime: Infinity,
+    });
+
+    const { data, isLoading } = useQuery<any>({
+        queryKey: ["hotSpot"],
+        queryFn: () => getSpot(locationData),
+        enabled: !!locationData,
+    });
+
     return (
         <div css={container}>
             {isLoading ? (

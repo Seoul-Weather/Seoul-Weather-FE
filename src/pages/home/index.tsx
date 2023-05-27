@@ -42,6 +42,7 @@ export default function Home() {
         queryFn: () => getLocation(coordsData),
         enabled: !!coordsData,
         select: (location) => location.documents[0].region_2depth_name,
+        staleTime: Infinity,
     });
 
     const { isLoading: weatherLoading, data: weatherData } = useQuery<WeatherData>({
@@ -55,14 +56,14 @@ export default function Home() {
         queryFn: () => getTemp(locationData),
         enabled: !!locationData,
     });
-    // locationData && console.log(locationData);
-    // weatherData && console.log(weatherData);
-    // tempData && console.log(tempData);
 
     useEffect(() => {
         setGu("마포구");
     }, []);
 
+    // locationData && console.log(locationData);
+    // weatherData && console.log(weatherData);
+    // tempData && console.log(tempData);
     return (
         <div css={wrapper}>
             <section css={mainContainer}>
