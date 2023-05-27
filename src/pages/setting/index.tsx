@@ -40,7 +40,7 @@ export default function Setting() {
                 <Link css={link} href="">
                     Instagram
                 </Link>
-                <Link css={link} href="">
+                <Link css={link} href="https://github.com/Seoul-Weather">
                     Github
                 </Link>
                 <Link css={link} href="">
