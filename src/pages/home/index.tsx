@@ -22,9 +22,13 @@ export default function Home() {
         enabled: !!coordsData,
     });
 
-    const { isLoading: weatherLoading, data: weatherData } = useQuery(["weather"], getWeather);
+    const { isLoading: weatherLoading, data: weatherData } = useQuery({
+        queryKey: ["weather"],
+        queryFn: () => getWeather(locationData.documents[0].region_2depth_name),
+        enabled: !!locationData,
+    });
 
-    // weatherData && console.log(weatherData, weatherData.items);
+    weatherData && console.log(weatherData);
 
     return (
         <div css={wrapper}>
@@ -45,13 +49,13 @@ export default function Home() {
                     <article css={weatherInfo}>
                         <span css={location}>{`서울특별시 ${locationData.documents[0].region_2depth_name}`}</span>
                         <h1 css={temperature}>
-                            {Math.round(weatherData.temp)}
+                            {parseInt(weatherData.temp)}
                             <sup css={unit}>&deg;C</sup>
                         </h1>
                         <article css={itemList}>
-                            {weatherData.items.map((itemName: string) => (
+                            {/* {weatherData.items.map((itemName: string) => (
                                 <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />
-                            ))}
+                            ))} */}
                         </article>
                     </article>
                 )}

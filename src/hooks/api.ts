@@ -39,8 +39,8 @@ export const getCoordinates = () => {
     });
 };
 
-export const getWeather = async () => {
-    const response = await fetch("http://localhost:4000/data");
+export const getWeather = async (gu: string) => {
+    const response = await fetch(`http://43.201.11.125:5001/user/${gu}`);
     return await response.json();
 };
 
