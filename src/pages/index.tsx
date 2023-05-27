@@ -7,8 +7,11 @@ import { getCoordinates, getLocation, getWeather } from "@/hooks/api";
 import { useRecoilValue } from "recoil";
 import { locationState } from "@/utils/atom";
 import { theme } from "@/styles/theme";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function Home() {
+    const router = useRouter();
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
@@ -22,7 +25,12 @@ export default function Home() {
 
     const { isLoading: weatherLoading, data: weatherData } = useQuery(["weather"], getWeather);
 
-    weatherData && console.log(weatherData, weatherData.items);
+    // weatherData && console.log(weatherData, weatherData.items);
+    useEffect(() => {
+        if (localStorage.getItem("name") === null) {
+            router.push("/join");
+        }
+    }, []);
 
     return (
         <div css={wrapper}>
