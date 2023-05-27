@@ -55,7 +55,11 @@ export default function Home() {
                 )}
                 <Image css={character} src="/man.svg" alt="설정" width={282} height={211} />
             </section>
-            <section css={detailContainer}></section>
+            <section css={detailContainer}>
+                <article css={detailInfo}></article>
+                <article css={detailInfo}></article>
+                <article css={detailInfo}></article>
+            </section>
         </div>
     );
 }
@@ -150,4 +154,7 @@ const character = css`
 const detailContainer = css`
     width: 100vw;
     height: 100vh;
+    background-color: ${theme.color.white};
 `;
+
+const detailInfo = css``;
