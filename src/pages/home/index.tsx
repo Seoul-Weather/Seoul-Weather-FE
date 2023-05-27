@@ -108,7 +108,7 @@ export default function Home() {
                             <article css={detailInfoSmallBox}>
                                 <Detail img="sunUp" title="일출" value={weatherData.sunrise} unit="" />
                                 <Detail img="sunDown" title="일몰" value={weatherData.sunset} unit="" />
-                                <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre} unit="mm" />
+                                <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre === "-" ? "0" : weatherData.rain_pre} unit="mm" />
                                 <Detail img="humidity" title="습도" value={weatherData.humiditiy} unit="%" />
                             </article>
                             <hr css={hLine} />
