@@ -20,11 +20,12 @@ export default function App({ Component, pageProps }: any) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-
-            <QueryClientProvider client={queryClient}>
-                <RecoilRoot>{isMobile ? <Component {...pageProps} /> : <Desktop />}</RecoilRoot>
-                <ReactQueryDevtools initialIsOpen={true} />
-            </QueryClientProvider>
+            <RecoilRoot>
+                <QueryClientProvider client={queryClient}>
+                    {isMobile ? <Component {...pageProps} /> : <Desktop />}
+                    <ReactQueryDevtools initialIsOpen={true} />
+                </QueryClientProvider>
+            </RecoilRoot>
         </>
     );
 }

@@ -7,6 +7,9 @@ import { theme } from "@/styles/theme";
 import { Chart } from "@/components/Chart";
 import ApexChart from "react-apexcharts";
 import { Detail } from "@/components/Detail";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { locationState } from "@/utils/atom";
 // import { useEffect, useState } from "react";
 
 interface WeatherData {
@@ -27,7 +30,8 @@ interface WeatherData {
 }
 
 export default function Home() {
-    // const [sky, setSky] = useState("sun");
+    const [gu, setGu] = useRecoilState(locationState);
+
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
@@ -37,21 +41,27 @@ export default function Home() {
         queryKey: ["location"],
         queryFn: () => getLocation(coordsData),
         enabled: !!coordsData,
+        select: (location) => location.documents[0].region_2depth_name,
     });
 
     const { isLoading: weatherLoading, data: weatherData } = useQuery<WeatherData>({
         queryKey: ["weather"],
-        queryFn: () => getWeather(locationData.documents[0].region_2depth_name),
+        queryFn: () => getWeather(locationData),
         enabled: !!locationData,
     });
 
-    const { isLoading: tempLoading, data: tempData } = useQuery({ queryKey: ["temperature"], queryFn: () => getTemp(locationData.documents[0].region_2depth_name), enabled: !!locationData });
+    const { isLoading: tempLoading, data: tempData } = useQuery({
+        queryKey: ["temperature"],
+        queryFn: () => getTemp(locationData),
+        enabled: !!locationData,
+    });
+    // locationData && console.log(locationData);
+    // weatherData && console.log(weatherData);
+    // tempData && console.log(tempData);
 
-    weatherData && console.log(weatherData);
-    tempData && console.log(tempData);
-    //    useEffect(() => {
-    //     if(weatherData?.rain_pre!=="-"){}
-    //    },[weatherData])
+    useEffect(() => {
+        setGu("마포구");
+    }, []);
 
     return (
         <div css={wrapper}>
@@ -78,7 +88,7 @@ export default function Home() {
                     </>
                 ) : (
                     <article css={weatherInfo}>
-                        <span css={location}>{`서울특별시 ${locationData.documents[0].region_2depth_name}`}</span>
+                        <span css={location}>{`서울특별시 ${locationData}`}</span>
                         <h1 css={temperature}>
                             {weatherData && parseInt(weatherData.temp)}
                             <sup css={unit}>&deg;C</sup>
