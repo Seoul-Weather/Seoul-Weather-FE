@@ -44,7 +44,12 @@ export const getWeather = async (gu: string) => {
     return await response.json();
 };
 
-export const getSpot = async () => {
-    const response = await fetch("http://localhost:4000/spot");
+export const getSpot = async (gu: string) => {
+    const response = await fetch(`http://43.201.11.125:5001/user/event/${gu}`);
+    return await response.json();
+};
+
+export const getTemp = async () => {
+    const response = await fetch("http://43.201.11.125:5001/user/event/동작구");
     return await response.json();
 };
