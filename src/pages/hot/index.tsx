@@ -1,12 +1,8 @@
 import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
 import { theme } from "@/styles/theme";
-import { locationState } from "@/utils/atom";
 import { css } from "@emotion/react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
 
 interface IData {
     title: string;

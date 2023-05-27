@@ -7,10 +7,6 @@ import { theme } from "@/styles/theme";
 import { Chart } from "@/components/Chart";
 import ApexChart from "react-apexcharts";
 import { Detail } from "@/components/Detail";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { locationState } from "@/utils/atom";
-// import { useEffect, useState } from "react";
 
 interface WeatherData {
     gu: string;
@@ -30,11 +26,10 @@ interface WeatherData {
 }
 
 export default function Home() {
-    const [gu, setGu] = useRecoilState(locationState);
-
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
+        staleTime: Infinity,
     });
 
     const { data: locationData, isLoading: locationLoading } = useQuery({
@@ -56,10 +51,6 @@ export default function Home() {
         queryFn: () => getTemp(locationData),
         enabled: !!locationData,
     });
-
-    useEffect(() => {
-        setGu("마포구");
-    }, []);
 
     // locationData && console.log(locationData);
     // weatherData && console.log(weatherData);
