@@ -40,16 +40,16 @@ export const getCoordinates = () => {
 };
 
 export const getWeather = async (gu: string) => {
-    const response = await fetch(`http://43.201.11.125:5001/user/${gu}`);
+    const response = await fetch(`https://www.worki-talki.shop/user/${gu}`);
     return await response.json();
 };
 
 export const getSpot = async (gu: string) => {
-    const response = await fetch(`http://43.201.11.125:5001/user/event/${gu}`);
+    const response = await fetch(`https://www.worki-talki.shop/user/event/${gu}`);
     return await response.json();
 };
 
 export const getTemp = async (gu: string) => {
-    const response = await fetch(`http://43.201.11.125:5001/user/precpt/${gu}`);
+    const response = await fetch(`https://www.worki-talki.shop/user/precpt/${gu}`);
     return await response.json();
 };
