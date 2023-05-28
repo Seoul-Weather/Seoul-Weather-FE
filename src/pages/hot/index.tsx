@@ -1,3 +1,4 @@
+import { Loader } from "@/components/Loader";
 import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
@@ -14,7 +15,7 @@ export default function Hot() {
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
-        staleTime: Infinity,
+        staleTime: 600000,
     });
 
     const { data: locationData, isLoading: locationLoading } = useQuery({
@@ -22,7 +23,7 @@ export default function Hot() {
         queryFn: () => getLocation(coordsData),
         enabled: !!coordsData,
         select: (location) => location.documents[0].region_2depth_name,
-        staleTime: Infinity,
+        staleTime: 600000,
     });
 
     const { data, isLoading } = useQuery<any>({
@@ -30,11 +31,11 @@ export default function Hot() {
         queryFn: () => getSpot(locationData),
         enabled: !!locationData,
     });
-
+    data && console.log(data);
     return (
         <div css={container}>
             {isLoading ? (
-                "loading..."
+                <Loader />
             ) : (
                 <section css={spotList}>
                     {data &&

@@ -7,6 +7,8 @@ import { theme } from "@/styles/theme";
 import { Chart } from "@/components/Chart";
 import ApexChart from "react-apexcharts";
 import { Detail } from "@/components/Detail";
+import ReactApexChart from "react-apexcharts";
+import { Loader } from "@/components/Loader";
 
 interface WeatherData {
     gu: string;
@@ -29,7 +31,7 @@ export default function Home() {
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
-        staleTime: Infinity,
+        staleTime: 600000,
     });
 
     const { data: locationData, isLoading: locationLoading } = useQuery({
@@ -37,7 +39,7 @@ export default function Home() {
         queryFn: () => getLocation(coordsData),
         enabled: !!coordsData,
         select: (location) => location.documents[0].region_2depth_name,
-        staleTime: Infinity,
+        staleTime: 600000,
     });
 
     const { isLoading: weatherLoading, data: weatherData } = useQuery<WeatherData>({
@@ -54,9 +56,13 @@ export default function Home() {
 
     // locationData && console.log(locationData);
     // weatherData && console.log(weatherData);
-    // tempData && console.log(tempData);
+    tempData && console.log(tempData);
     return (
         <div css={wrapper}>
+            <Link css={hotIcon} href="/hot">
+                <Loader />
+                <Image src="/hotIcon.svg" width={60} height={60} alt="HotSpot" />
+            </Link>
             <section css={mainContainer}>
                 <Image css={bgImage} src={"/background.svg"} alt="background" fill />
                 {weatherLoading ? (
@@ -76,27 +82,31 @@ export default function Home() {
                 </div>
                 {weatherLoading ? (
                     <>
-                        <div>불러오는 중..</div>
+                        <Loader />
                     </>
                 ) : (
-                    <article css={weatherInfo}>
-                        <span css={location}>{`서울특별시 ${locationData}`}</span>
-                        <h1 css={temperature}>
-                            {weatherData && parseInt(weatherData.temp)}
-                            <sup css={unit}>&deg;C</sup>
-                        </h1>
-                        <article css={itemList}>
-                            {/* {weatherData.items.map((itemName: string) => (
-                                <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />
-                            ))} */}
+                    weatherData && (
+                        <article css={weatherInfo}>
+                            <span css={location}>{`서울특별시 ${locationData}`}</span>
+                            <h1 css={temperature}>
+                                {parseInt(weatherData.temp)}
+                                <sup css={unit}>&deg;C</sup>
+                            </h1>
+                            <article css={itemList}>
+                                {weatherData.item.length ? (
+                                    weatherData.item.map((itemName: string) => <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />)
+                                ) : (
+                                    <div>오늘은 준비물이 없네요!</div>
+                                )}
+                            </article>
                         </article>
-                    </article>
+                    )
                 )}
                 <Image css={character} src="/man.svg" alt="설정" width={282} height={211} />
             </section>
             <section css={detailContainer}>
                 {weatherLoading ? (
-                    <div>loading..</div>
+                    <Loader />
                 ) : (
                     weatherData && (
                         <article css={detailInfoBox}>
@@ -123,93 +133,7 @@ export default function Home() {
                         </article>
                     )
                 )}
-
-                <div>
-                    {/* <Chart location={{ tempLoading, tempData }} /> */}
-                    <div>
-                        {/* {tempLoading ? (
-                            "Loading chart..."
-                        ) : (
-
-                            <ApexChart
-                                type="bar"
-                                series={[
-                                    {
-                                        name: "sales",
-                                        data: [
-                                            {
-                                                x: "2019/01/01",
-                                                y: 400,
-                                            },
-                                            {
-                                                x: "2019/04/01",
-                                                y: 430,
-                                            },
-                                            {
-                                                x: "2019/07/01",
-                                                y: 448,
-                                            },
-                                            {
-                                                x: "2019/10/01",
-                                                y: 470,
-                                            },
-                                            {
-                                                x: "2020/01/01",
-                                                y: 540,
-                                            },
-                                            {
-                                                x: "2020/04/01",
-                                                y: 580,
-                                            },
-                                            {
-                                                x: "2020/07/01",
-                                                y: 690,
-                                            },
-                                            {
-                                                x: "2020/10/01",
-                                                y: 690,
-                                            },
-                                        ],
-                                    },
-                                ]}
-                                options={{
-                                    chart: {
-                                        type: "bar",
-                                        height: 380,
-                                    },
-                                    xaxis: {
-                                        type: "category",
-                                        // labels: {
-                                        //     formatter: function (val) {
-                                        //         return "Q" + dayjs(val).quarter();
-                                        //     },
-                                        // },
-                                        group: {
-                                            style: {
-                                                fontSize: "10px",
-                                                fontWeight: 700,
-                                            },
-                                            groups: [
-                                                { title: "2019", cols: 4 },
-                                                { title: "2020", cols: 4 },
-                                            ],
-                                        },
-                                    },
-                                    title: {
-                                        text: "Grouped Labels on the X-axis",
-                                    },
-                                    // tooltip: {
-                                    //     x: {
-                                    //         formatter: function (val) {
-                                    //             return "Q" + dayjs(val).quarter() + " " + dayjs(val).format("YYYY");
-                                    //         },
-                                    //     },
-                                    // },
-                                }}
-                            />
-                        )} */}
-                    </div>
-                </div>
+                <section></section>
             </section>
         </div>
     );
@@ -218,6 +142,13 @@ const wrapper = css`
     width: 100%;
     display: flex;
     flex-direction: column;
+`;
+
+const hotIcon = css`
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    z-index: 3;
 `;
 
 const mainContainer = css`
@@ -335,4 +266,14 @@ const detailInfoSmallBox = css`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+`;
+
+const chartWrapper = css`
+    width: 90%;
+`;
+
+const chart = css`
+    width: 100%;
+    overflow: auto;
+    white-space: nowrap;
 `;
