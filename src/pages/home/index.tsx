@@ -60,7 +60,6 @@ export default function Home() {
     return (
         <div css={wrapper}>
             <Link css={hotIcon} href="/hot">
-                <Loader />
                 <Image src="/hotIcon.svg" width={60} height={60} alt="HotSpot" />
             </Link>
             <section css={mainContainer}>
@@ -74,7 +73,7 @@ export default function Home() {
                 )}
                 <div css={iconList}>
                     <button css={resetIcon}>
-                        <Image src="/reset.svg" alt="설정" width={25} height={25} />
+                        <Image src="/reset.svg" alt="리셋" width={25} height={25} />
                     </button>
                     <Link href="/setting">
                         <Image css={settingIcon} src="/setting.svg" alt="설정" width={25} height={25} />
