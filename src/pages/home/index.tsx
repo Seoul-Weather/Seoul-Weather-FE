@@ -79,28 +79,28 @@ export default function Home() {
                         <Image css={settingIcon} src="/setting.svg" alt="설정" width={25} height={25} />
                     </Link>
                 </div>
-                {weatherLoading ? (
-                    <>
+                <article css={weatherInfo}>
+                    {weatherLoading ? (
                         <Loader />
-                    </>
-                ) : (
-                    weatherData && (
-                        <article css={weatherInfo}>
-                            <span css={location}>{`서울특별시 ${locationData}`}</span>
-                            <h1 css={temperature}>
-                                {parseInt(weatherData.temp)}
-                                <sup css={unit}>&deg;C</sup>
-                            </h1>
-                            <article css={itemList}>
-                                {weatherData.item.length ? (
-                                    weatherData.item.map((itemName: string) => <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />)
-                                ) : (
-                                    <div>오늘은 준비물이 없네요!</div>
-                                )}
-                            </article>
-                        </article>
-                    )
-                )}
+                    ) : (
+                        weatherData && (
+                            <>
+                                <span css={location}>{`서울특별시 ${locationData}`}</span>
+                                <h1 css={temperature}>
+                                    {parseInt(weatherData.temp)}
+                                    <sup css={unit}>&deg;C</sup>
+                                </h1>
+                                <article css={itemList}>
+                                    {weatherData.item.length ? (
+                                        weatherData.item.map((itemName: string) => <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />)
+                                    ) : (
+                                        <div>오늘은 준비물이 없네요!</div>
+                                    )}
+                                </article>
+                            </>
+                        )
+                    )}{" "}
+                </article>
                 <Image css={character} src="/man.svg" alt="설정" width={282} height={211} />
             </section>
             <section css={detailContainer}>
