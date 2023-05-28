@@ -34,14 +34,30 @@ export default function Hot() {
     });
     data && console.log(data);
 
-    return <div css={container}>{isLoading ? <Loader /> : <section css={spotList}>{data && data.map((value) => <Event key={value.event} props={value} />)}</section>}</div>;
+    return (
+        <div css={container({ isLoading })}>
+            {isLoading ? (
+                <>
+                    <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
+                    <Loader />
+                </>
+            ) : (
+                <section css={spotList}>{data && data.map((value) => <Event key={value.event} props={value} />)}</section>
+            )}
+        </div>
+    );
 }
 
-const container = css`
+const container = (isLoading: Boolean) => css`
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
+    align-items: center;
+    position: relative;
+`;
+const loadingImg = css`
+    object-fit: cover;
 `;
 
 const spotList = css`

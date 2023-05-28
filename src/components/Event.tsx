@@ -3,7 +3,7 @@ import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";
 
-export const Event = ({ key, props }: { key: string; props: IData }) => {
+export const Event = ({ props }: { props: IData }) => {
     const { event, time, type } = props;
     let photo = "공연";
     if (type.includes("축제")) photo = "축제";
