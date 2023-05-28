@@ -35,7 +35,7 @@ export default function Hot() {
     data && console.log(data);
 
     return (
-        <div css={container({ isLoading })}>
+        <div css={container}>
             {isLoading ? (
                 <>
                     <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
@@ -48,7 +48,7 @@ export default function Hot() {
     );
 }
 
-const container = (isLoading: Boolean) => css`
+const container = css`
     width: 100vw;
     height: 100vh;
     display: flex;
