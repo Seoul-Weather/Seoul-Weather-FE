@@ -56,7 +56,7 @@ export default function Home() {
 
     // locationData && console.log(locationData);
     // weatherData && console.log(weatherData);
-    tempData && console.log(tempData);
+    // tempData && console.log(tempData);
     return (
         <div css={wrapper}>
             <Link css={hotIcon} href="/hot">

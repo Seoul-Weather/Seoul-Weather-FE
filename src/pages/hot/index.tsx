@@ -1,3 +1,4 @@
+import { Event } from "@/components/Event";
 import { Loader } from "@/components/Loader";
 import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
 import { theme } from "@/styles/theme";
@@ -5,10 +6,10 @@ import { css } from "@emotion/react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
-interface IData {
-    title: string;
-    address: string;
-    due: string;
+export interface IData {
+    event: string;
+    time: string;
+    type: string;
 }
 
 export default function Hot() {
@@ -26,33 +27,14 @@ export default function Hot() {
         staleTime: 600000,
     });
 
-    const { data, isLoading } = useQuery<any>({
+    const { data, isLoading } = useQuery<IData[]>({
         queryKey: ["hotSpot"],
         queryFn: () => getSpot(locationData),
         enabled: !!locationData,
     });
     data && console.log(data);
-    return (
-        <div css={container}>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <section css={spotList}>
-                    {data &&
-                        data.map((value: any) => (
-                            <article css={spot} key={value.title}>
-                                <Image css={thumbnail} src="" alt="thumbnail" />
-                                <section css={caption}>
-                                    <h4 css={title}>{value.title}</h4>
-                                    <span css={context}>{value.address}</span>
-                                    <span css={context}>{value.due}</span>
-                                </section>
-                            </article>
-                        ))}
-                </section>
-            )}
-        </div>
-    );
+
+    return <div css={container}>{isLoading ? <Loader /> : <section css={spotList}>{data && data.map((value) => <Event key={value.event} props={value} />)}</section>}</div>;
 }
 
 const container = css`
@@ -71,38 +53,4 @@ const spotList = css`
     align-items: flex-start;
     padding-top: 2vh;
     gap: 2vh;
-`;
-
-const spot = css`
-    width: 100%;
-    height: 31vh;
-    /* border: none; */
-    border: 1px solid brown;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-`;
-
-const thumbnail = css`
-    width: 100%;
-    height: 64%;
-`;
-
-const caption = css`
-    width: 100%;
-    height: 36%;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding-left: 0.8rem;
-    border-top: 1px solid brown; //test
-`;
-
-const title = css``;
-
-const context = css`
-    color: ${theme.color.grey_dark};
-    font-size: ${theme.fontSize.small};
 `;
