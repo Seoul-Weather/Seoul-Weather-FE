@@ -5,6 +5,7 @@ import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 
 export interface IData {
     event: string;
@@ -36,6 +37,14 @@ export default function Hot() {
 
     return (
         <div css={container(isLoading)}>
+            <div css={iconList}>
+                <Link href="/home">
+                    <Image src="/home.svg" alt="설정" width={25} height={25} />
+                </Link>
+                <button css={resetIcon}>
+                    <Image src="/reset.svg" alt="리셋" width={25} height={25} />
+                </button>
+            </div>
             {isLoading ? (
                 <>
                     <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
@@ -56,6 +65,24 @@ const container = (isLoading: boolean) => css`
     align-items: ${isLoading ? "center" : "flex-start"};
     position: relative;
 `;
+
+const iconList = css`
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px;
+    position: absolute;
+    top: 5px;
+    gap: 5px;
+`;
+
+const resetIcon = css`
+    border: none;
+    background-color: transparent;
+`;
+
 const loadingImg = css`
     object-fit: cover;
 `;
@@ -69,4 +96,5 @@ const spotList = css`
     align-items: flex-start;
     padding-top: 2vh;
     gap: 2vh;
+    margin-top: 50px;
 `;

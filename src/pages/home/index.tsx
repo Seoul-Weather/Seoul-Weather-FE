@@ -9,6 +9,7 @@ import ApexChart from "react-apexcharts";
 import { Detail } from "@/components/Detail";
 import ReactApexChart from "react-apexcharts";
 import { Loader } from "@/components/Loader";
+import { useEffect, useState } from "react";
 
 interface WeatherData {
     gu: string;
@@ -25,6 +26,15 @@ interface WeatherData {
     uv: string;
     humiditiy: string;
     item: string[];
+}
+
+export interface TempData {
+    FCST_DT: string;
+    PRECIPITATION: string;
+    PRECPT_TYPE: string;
+    RAIN_CHANCE: string;
+    SKY_STTS: string;
+    TEMP: string;
 }
 
 export default function Home() {
@@ -48,11 +58,17 @@ export default function Home() {
         enabled: !!locationData,
     });
 
-    const { isLoading: tempLoading, data: tempData } = useQuery({
+    const { isLoading: tempLoading, data: tempData } = useQuery<TempData[]>({
         queryKey: ["temperature"],
         queryFn: () => getTemp(locationData),
         enabled: !!locationData,
     });
+
+    // const [midTemp, setMidTemp] = useState(18);
+
+    // useEffect(() => {
+    //     weatherData && setMidTemp(Math.round((+weatherData?.max_tmp + +weatherData?.min_tmp) / 2));
+    // }, [weatherData]);
 
     // locationData && console.log(locationData);
     // weatherData && console.log(weatherData);
@@ -99,7 +115,7 @@ export default function Home() {
                                 </article>
                             </>
                         )
-                    )}{" "}
+                    )}
                 </article>
                 <Image css={character} src="/man.svg" alt="설정" width={282} height={211} />
             </section>
@@ -108,31 +124,41 @@ export default function Home() {
                     <Loader />
                 ) : (
                     weatherData && (
-                        <article css={detailInfoBox}>
-                            <article css={detailInfoSmallBox}>
-                                <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} unit="℃" />
-                                <Detail img="lowTemp" title="최저온도" value={weatherData.max_tmp} unit="℃" />
-                                <Detail img="humanTemp" title="체감온도" value={weatherData.temp} unit="℃" />
-                                <Detail img="uv" title="자외선지수" value={weatherData.uv} unit="" />
+                        <>
+                            <article css={detailInfoBox}>
+                                <div css={detailInfoName}>상세 날씨</div>
+                                <article css={detailInfoSmallBox}>
+                                    <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} unit="℃" />
+                                    <Detail img="lowTemp" title="최저온도" value={weatherData.max_tmp} unit="℃" />
+                                    <Detail img="humanTemp" title="체감온도" value={weatherData.temp} unit="℃" />
+                                    <Detail img="uv" title="자외선지수" value={weatherData.uv} unit="" />
+                                </article>
+                                <hr css={hLine} />
+                                <article css={detailInfoSmallBox}>
+                                    <Detail img="sunUp" title="일출" value={weatherData.sunrise} unit="" />
+                                    <Detail img="sunDown" title="일몰" value={weatherData.sunset} unit="" />
+                                    <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre === "-" ? "0" : weatherData.rain_pre} unit="mm" />
+                                    <Detail img="humidity" title="습도" value={weatherData.humiditiy} unit="%" />
+                                </article>
+                                <hr css={hLine} />
+                                <article css={detailInfoSmallBox}>
+                                    <Detail img="pm" title="미세먼지" value={weatherData.pm10} unit="ppm" />
+                                    <Detail img="pm" title="초미세먼지" value={weatherData.pm25} unit="ppm" />
+                                    <Detail img="sand" title="황사지수" value="좋음" unit="" />
+                                    <Detail img="wind" title="풍속" value={weatherData.wind} unit="m/s" />
+                                </article>
                             </article>
-                            <hr css={hLine} />
-                            <article css={detailInfoSmallBox}>
-                                <Detail img="sunUp" title="일출" value={weatherData.sunrise} unit="" />
-                                <Detail img="sunDown" title="일몰" value={weatherData.sunset} unit="" />
-                                <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre === "-" ? "0" : weatherData.rain_pre} unit="mm" />
-                                <Detail img="humidity" title="습도" value={weatherData.humiditiy} unit="%" />
+                            <article css={chartWrapper}>
+                                <div css={chartName}>시간대별 일기예보</div>
+                                <div css={chartBox}>
+                                    <section css={chart}>
+                                        {tempData && tempData.map((value) => <Chart key={value.FCST_DT} value={value} high={weatherData.max_tmp} low={weatherData.min_tmp} />)}
+                                    </section>
+                                </div>
                             </article>
-                            <hr css={hLine} />
-                            <article css={detailInfoSmallBox}>
-                                <Detail img="pm" title="미세먼지" value={weatherData.pm10} unit="ppm" />
-                                <Detail img="pm" title="초미세먼지" value={weatherData.pm25} unit="ppm" />
-                                <Detail img="sand" title="황사지수" value="좋음" unit="" />
-                                <Detail img="wind" title="풍속" value={weatherData.wind} unit="m/s" />
-                            </article>
-                        </article>
+                        </>
                     )
                 )}
-                <section></section>
             </section>
         </div>
     );
@@ -252,6 +278,13 @@ const detailInfoBox = css`
     margin: 7% 0;
 `;
 
+const detailInfoName = css`
+    margin-top: 12px;
+    margin-left: 10%;
+    width: 100%;
+    color: ${theme.color.grey_dark};
+`;
+
 const hLine = css`
     height: 0px;
     width: 90%;
@@ -261,7 +294,7 @@ const hLine = css`
 
 const detailInfoSmallBox = css`
     width: 93%;
-    height: 33%;
+    height: 31%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -269,10 +302,33 @@ const detailInfoSmallBox = css`
 
 const chartWrapper = css`
     width: 90%;
+    height: 400px;
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+`;
+const chartName = css`
+    margin-top: 12px;
+    margin-left: 4%;
+    width: 100%;
+    color: ${theme.color.grey_dark};
+    position: sticky;
+    left: 14px;
+`;
+
+const chartBox = css`
+    width: 100%;
+    height: 350px;
+    overflow: auto;
+    white-space: nowrap;
+    margin-bottom: 100px;
+    position: relative;
 `;
 
 const chart = css`
-    width: 100%;
-    overflow: auto;
-    white-space: nowrap;
+    width: fit-content;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 `;
