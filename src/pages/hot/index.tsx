@@ -35,7 +35,7 @@ export default function Hot() {
     data && console.log(data);
 
     return (
-        <div css={container}>
+        <div css={container(isLoading)}>
             {isLoading ? (
                 <>
                     <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
@@ -48,12 +48,12 @@ export default function Hot() {
     );
 }
 
-const container = css`
+const container = (isLoading: boolean) => css`
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: ${isLoading ? "center" : "flex-start"};
     position: relative;
 `;
 const loadingImg = css`
