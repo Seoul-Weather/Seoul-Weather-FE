@@ -306,6 +306,7 @@ const chartWrapper = css`
     background-color: white;
     border: none;
     border-radius: 10px;
+    margin-bottom: 100px;
 `;
 const chartName = css`
     margin-top: 12px;
@@ -321,8 +322,11 @@ const chartBox = css`
     height: 350px;
     overflow: auto;
     white-space: nowrap;
-    margin-bottom: 100px;
+
     position: relative;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const chart = css`
