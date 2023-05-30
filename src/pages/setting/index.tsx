@@ -10,30 +10,35 @@ export default function Setting() {
     useEffect(() => {
         if (!localStorage.getItem("name")) router.replace("/");
     }, []);
+
+    const reset = () => {
+        localStorage.removeItem("name");
+        router.push("/intro");
+    };
     return (
         <div css={container}>
             <h1 css={header}>설정</h1>
 
             <section css={section}>
                 <strong css={sectionHeader}>앱 설정</strong>
-                <Link css={link} href="">
+                <Link css={link} href="/join">
                     알림 시간 변경
                 </Link>
                 <Link css={link} href="">
-                    캐릭터 설정
+                    `` 캐릭터 설정 (추후 업데이트 예정)
                 </Link>
                 <Link css={link} href="">
-                    배경 설정
+                    배경 설정 (추후 업데이트 예정)
                 </Link>
             </section>
             <section css={section}>
                 <strong css={sectionHeader}>계정</strong>
-                <Link css={link} href="">
+                <Link css={link} href="/join">
                     닉네임 변경
                 </Link>
-                <Link css={link} href="">
+                <div css={link} onClick={reset}>
                     초기화
-                </Link>
+                </div>
             </section>
             <section css={section}>
                 <strong css={sectionHeader}>이용안내</strong>
