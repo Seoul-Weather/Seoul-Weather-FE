@@ -44,6 +44,7 @@
             "type": "image/png"
         }
     ],
-
-    "applicationServerKey": "%NEXT_PUBLIC_VAPID_PUBLIC_KEY%"
+    "web_app_manifest": {
+        "applicationServerKey": "%NEXT_PUBLIC_VAPID_PUBLIC_KEY%"
+    }
 }

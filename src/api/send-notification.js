@@ -12,8 +12,8 @@ export default async function handler(req, res) {
         const notificationPayload = {
             title: "Hello from PWA",
             body: "This is a test push notification",
-            icon: "/icon-192x192.png",
-            badge: "/icon-192x192.png",
+            icon: "/maskable_icon_x192.png",
+            badge: "/maskable_icon_x192.png",
         };
 
         try {
