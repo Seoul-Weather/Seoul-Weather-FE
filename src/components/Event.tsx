@@ -28,7 +28,7 @@ export const Event = ({ props }: { props: IData }) => {
 
 const spot = css`
     width: 100%;
-    height: 34vh;
+    height: 300px;
     border: none;
     /* border: 1px solid brown; */
     border-radius: 10px;
