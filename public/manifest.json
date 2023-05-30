@@ -1,11 +1,11 @@
 {
-    "theme_color": "#0056b3",
-    "background_color": "#0056b3",
+    "theme_color": "#5e4036",
+    "background_color": "#5e4036",
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "Your PWA APP NAME",
-    "short_name": "Your PWA APP NAME",
+    "name": "날씨가 어떻든",
+    "short_name": "날씨가 어떻든",
     "icons": [
         {
             "src": "/maskable_icon_x48.png",
