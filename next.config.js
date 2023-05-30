@@ -12,4 +12,9 @@ const nextConfig = withPWA({
     reactStrictMode: false,
 });
 
-module.exports = nextConfig;
+module.exports = {
+    ...nextConfig,
+    env: {
+        NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    },
+};

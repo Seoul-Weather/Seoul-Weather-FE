@@ -43,5 +43,8 @@
             "sizes": "512x512",
             "type": "image/png"
         }
-    ]
+    ],
+    "web_app_manifest": {
+        "applicationServerKey": "%NEXT_PUBLIC_VAPID_PUBLIC_KEY%"
+    }
 }
