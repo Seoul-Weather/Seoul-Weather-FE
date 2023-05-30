@@ -7,7 +7,7 @@ export default function RootRouter() {
         if (localStorage.getItem("name")) {
             router.push("/home");
         } else {
-            router.push("/join");
+            router.push("/intro");
         }
     }, []);
 }
