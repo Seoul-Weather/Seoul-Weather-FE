@@ -1,5 +1,6 @@
 import { Event } from "@/components/Event";
 import { Loader } from "@/components/Loader";
+import ServerError from "@/components/ServerError";
 import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
@@ -38,7 +39,7 @@ export default function Hot() {
         staleTime: 600000,
     });
 
-    const { data, isLoading } = useQuery<IData[]>({
+    const { data, isLoading, isError } = useQuery<IData[]>({
         queryKey: ["hotSpot"],
         queryFn: () => getSpot(locationData),
         enabled: !!locationData,
@@ -56,24 +57,30 @@ export default function Hot() {
     };
 
     return (
-        <div css={container(isLoading)}>
-            <div css={iconList}>
-                <Link href="/home">
-                    <Image src="/home.svg" alt="설정" width={25} height={25} />
-                </Link>
-                <button css={resetIcon} onClick={resetAndRefetchQuery}>
-                    <Image src="/reset.svg" alt="리셋" width={25} height={25} />
-                </button>
-            </div>
-            {isLoading ? (
-                <>
-                    <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
-                    <Loader />
-                </>
+        <>
+            {isError ? (
+                <ServerError />
             ) : (
-                <section css={spotList}>{data && data.map((value) => <Event key={value.event} props={value} />)}</section>
+                <div css={container(isLoading)}>
+                    <div css={iconList}>
+                        <Link href="/home">
+                            <Image src="/home.svg" alt="설정" width={25} height={25} />
+                        </Link>
+                        <button css={resetIcon} onClick={resetAndRefetchQuery}>
+                            <Image src="/reset.svg" alt="리셋" width={25} height={25} />
+                        </button>
+                    </div>
+                    {isLoading ? (
+                        <>
+                            <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
+                            <Loader />
+                        </>
+                    ) : (
+                        <section css={spotList}>{data && data.map((value) => <Event key={value.event} props={value} />)}</section>
+                    )}
+                </div>
             )}
-        </div>
+        </>
     );
 }
 

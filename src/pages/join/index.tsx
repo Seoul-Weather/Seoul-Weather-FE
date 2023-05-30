@@ -115,6 +115,7 @@ const container = css`
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    padding: 30px 0;
 `;
 
 const nameForm = css`

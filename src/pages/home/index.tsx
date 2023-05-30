@@ -11,6 +11,7 @@ import { Detail } from "@/components/Detail";
 import { Loader } from "@/components/Loader";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import ServerError from "@/components/ServerError";
 
 interface WeatherData {
     gu: string;
@@ -61,7 +62,11 @@ export default function Home() {
         staleTime: 600000,
     });
 
-    const { isLoading: weatherLoading, data: weatherData } = useQuery<WeatherData>({
+    const {
+        isLoading: weatherLoading,
+        data: weatherData,
+        isError,
+    } = useQuery<WeatherData>({
         queryKey: ["weather"],
         queryFn: () => getWeather(locationData),
         enabled: !!locationData,
@@ -86,100 +91,106 @@ export default function Home() {
     // weatherData && console.log(weatherData);
     // tempData && console.log(tempData);
     return (
-        <div css={wrapper}>
-            <Link css={hotIcon} href="/hot">
-                <Image src="/hotIcon.svg" width={60} height={60} alt="HotSpot" />
-            </Link>
-            <section css={mainContainer}>
-                <Image css={bgImage} quality={100} src={"/background.svg"} alt="background" fill />
-                {weatherLoading ? (
-                    <Image css={weatherIcon(true)} quality={100} src={"/맑음.svg"} alt="sun" width={90} height={90} />
-                ) : weatherData?.rain_pre === "-" ? (
-                    <Image
-                        css={weatherIcon(weatherData?.sky_stts === "맑음" || weatherData?.sky_stts === "구름많음")}
-                        quality={100}
-                        src={`/${weatherData?.sky_stts}.svg`}
-                        alt="sun"
-                        width={90}
-                        height={90}
-                    />
-                ) : (
-                    <Image css={weatherIcon(false)} src={"/rain.svg"} alt="etc" width={90} height={90} />
-                )}
-                <div css={iconList}>
-                    <button css={resetIcon} onClick={resetAndRefetchQuery}>
-                        <Image src="/reset.svg" alt="리셋" width={25} height={25} />
-                    </button>
-                    <Link href="/setting">
-                        <Image css={settingIcon} src="/setting.svg" alt="설정" width={25} height={25} />
+        <>
+            {isError ? (
+                <ServerError />
+            ) : (
+                <div css={wrapper}>
+                    <Link css={hotIcon} href="/hot">
+                        <Image src="/hotIcon.svg" width={60} height={60} alt="HotSpot" />
                     </Link>
+                    <section css={mainContainer}>
+                        <Image css={bgImage} quality={100} src={"/background.svg"} alt="background" fill />
+                        {weatherLoading ? (
+                            <Image css={weatherIcon(true)} quality={100} src={"/맑음.svg"} alt="sun" width={90} height={90} />
+                        ) : weatherData?.rain_pre === "-" ? (
+                            <Image
+                                css={weatherIcon(weatherData?.sky_stts === "맑음" || weatherData?.sky_stts === "구름많음")}
+                                quality={100}
+                                src={`/${weatherData?.sky_stts}.svg`}
+                                alt="sun"
+                                width={90}
+                                height={90}
+                            />
+                        ) : (
+                            <Image css={weatherIcon(false)} src={"/rain.svg"} alt="etc" width={90} height={90} />
+                        )}
+                        <div css={iconList}>
+                            <button css={resetIcon} onClick={resetAndRefetchQuery}>
+                                <Image src="/reset.svg" alt="리셋" width={25} height={25} />
+                            </button>
+                            <Link href="/setting">
+                                <Image css={settingIcon} src="/setting.svg" alt="설정" width={25} height={25} />
+                            </Link>
+                        </div>
+                        <article css={weatherInfo}>
+                            {weatherLoading ? (
+                                <Loader />
+                            ) : (
+                                weatherData && (
+                                    <>
+                                        <span css={location}>{`서울특별시 ${locationData}`}</span>
+                                        <h1 css={temperature}>
+                                            {parseInt(weatherData.temp)}
+                                            <sup css={unit}>&deg;C</sup>
+                                        </h1>
+                                        <article css={itemList}>
+                                            {weatherData.item.length ? (
+                                                weatherData.item.map((itemName: string) => <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />)
+                                            ) : (
+                                                <div>오늘은 준비물이 없네요!</div>
+                                            )}
+                                        </article>
+                                    </>
+                                )
+                            )}
+                        </article>
+                        <Image quality={100} css={character} src="/man.svg" alt="설정" width={282} height={211} />
+                    </section>
+                    <section css={detailContainer}>
+                        {weatherLoading ? (
+                            <Loader />
+                        ) : (
+                            weatherData && (
+                                <>
+                                    <article css={detailInfoBox}>
+                                        <div css={detailInfoName}>상세 날씨</div>
+                                        <article css={detailInfoSmallBox}>
+                                            <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} unit="℃" />
+                                            <Detail img="lowTemp" title="최저온도" value={weatherData.min_tmp} unit="℃" />
+                                            <Detail img="humanTemp" title="체감온도" value={weatherData.temp} unit="℃" />
+                                            <Detail img="uv" title="자외선지수" value={weatherData.uv} unit="" />
+                                        </article>
+                                        <hr css={hLine} />
+                                        <article css={detailInfoSmallBox}>
+                                            <Detail img="sunUp" title="일출" value={weatherData.sunrise} unit="" />
+                                            <Detail img="sunDown" title="일몰" value={weatherData.sunset} unit="" />
+                                            <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre === "-" ? "0" : weatherData.rain_pre} unit="mm" />
+                                            <Detail img="humidity" title="습도" value={weatherData.humiditiy} unit="%" />
+                                        </article>
+                                        <hr css={hLine} />
+                                        <article css={detailInfoSmallBox}>
+                                            <Detail img="pm" title="미세먼지" value={weatherData.pm10} unit="ppm" />
+                                            <Detail img="pm" title="초미세먼지" value={weatherData.pm25} unit="ppm" />
+                                            <Detail img="sand" title="황사지수" value="좋음" unit="" />
+                                            <Detail img="wind" title="풍속" value={weatherData.wind} unit="m/s" />
+                                        </article>
+                                    </article>
+                                    <article css={chartWrapper}>
+                                        <div css={chartName}>시간대별 일기예보</div>
+                                        <div css={chartBox}>
+                                            <section css={chart}>
+                                                {tempData && tempData.map((value) => <Chart key={value.FCST_DT} value={value} high={weatherData.max_tmp} low={weatherData.min_tmp} />)}
+                                            </section>
+                                        </div>
+                                    </article>
+                                </>
+                            )
+                        )}
+                    </section>
                 </div>
-                <article css={weatherInfo}>
-                    {weatherLoading ? (
-                        <Loader />
-                    ) : (
-                        weatherData && (
-                            <>
-                                <span css={location}>{`서울특별시 ${locationData}`}</span>
-                                <h1 css={temperature}>
-                                    {parseInt(weatherData.temp)}
-                                    <sup css={unit}>&deg;C</sup>
-                                </h1>
-                                <article css={itemList}>
-                                    {weatherData.item.length ? (
-                                        weatherData.item.map((itemName: string) => <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />)
-                                    ) : (
-                                        <div>오늘은 준비물이 없네요!</div>
-                                    )}
-                                </article>
-                            </>
-                        )
-                    )}
-                </article>
-                <Image quality={100} css={character} src="/man.svg" alt="설정" width={282} height={211} />
-            </section>
-            <section css={detailContainer}>
-                {weatherLoading ? (
-                    <Loader />
-                ) : (
-                    weatherData && (
-                        <>
-                            <article css={detailInfoBox}>
-                                <div css={detailInfoName}>상세 날씨</div>
-                                <article css={detailInfoSmallBox}>
-                                    <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} unit="℃" />
-                                    <Detail img="lowTemp" title="최저온도" value={weatherData.min_tmp} unit="℃" />
-                                    <Detail img="humanTemp" title="체감온도" value={weatherData.temp} unit="℃" />
-                                    <Detail img="uv" title="자외선지수" value={weatherData.uv} unit="" />
-                                </article>
-                                <hr css={hLine} />
-                                <article css={detailInfoSmallBox}>
-                                    <Detail img="sunUp" title="일출" value={weatherData.sunrise} unit="" />
-                                    <Detail img="sunDown" title="일몰" value={weatherData.sunset} unit="" />
-                                    <Detail img="rainAmount" title="강수량" value={weatherData.rain_pre === "-" ? "0" : weatherData.rain_pre} unit="mm" />
-                                    <Detail img="humidity" title="습도" value={weatherData.humiditiy} unit="%" />
-                                </article>
-                                <hr css={hLine} />
-                                <article css={detailInfoSmallBox}>
-                                    <Detail img="pm" title="미세먼지" value={weatherData.pm10} unit="ppm" />
-                                    <Detail img="pm" title="초미세먼지" value={weatherData.pm25} unit="ppm" />
-                                    <Detail img="sand" title="황사지수" value="좋음" unit="" />
-                                    <Detail img="wind" title="풍속" value={weatherData.wind} unit="m/s" />
-                                </article>
-                            </article>
-                            <article css={chartWrapper}>
-                                <div css={chartName}>시간대별 일기예보</div>
-                                <div css={chartBox}>
-                                    <section css={chart}>
-                                        {tempData && tempData.map((value) => <Chart key={value.FCST_DT} value={value} high={weatherData.max_tmp} low={weatherData.min_tmp} />)}
-                                    </section>
-                                </div>
-                            </article>
-                        </>
-                    )
-                )}
-            </section>
-        </div>
+            )}
+        </>
     );
 }
 const wrapper = css`
