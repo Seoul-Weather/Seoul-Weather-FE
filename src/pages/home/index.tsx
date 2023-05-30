@@ -1,13 +1,13 @@
 import { css } from "@emotion/react";
 import Link from "next/link";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCoordinates, getLocation, getTemp, getWeather } from "@/hooks/api";
 import { theme } from "@/styles/theme";
 import { Chart } from "@/components/Chart";
-import ApexChart from "react-apexcharts";
+
 import { Detail } from "@/components/Detail";
-import ReactApexChart from "react-apexcharts";
+
 import { Loader } from "@/components/Loader";
 import { useEffect, useState } from "react";
 
@@ -38,6 +38,8 @@ export interface TempData {
 }
 
 export default function Home() {
+    const queryClient = useQueryClient();
+
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
@@ -64,11 +66,14 @@ export default function Home() {
         enabled: !!locationData,
     });
 
-    // const [midTemp, setMidTemp] = useState(18);
+    const resetAndRefetchQuery = async () => {
+        await queryClient.resetQueries(["coordinates"]);
+        await queryClient.resetQueries(["location"]);
+        await queryClient.resetQueries(["weather"]);
+        await queryClient.resetQueries(["temperature"]);
 
-    // useEffect(() => {
-    //     weatherData && setMidTemp(Math.round((+weatherData?.max_tmp + +weatherData?.min_tmp) / 2));
-    // }, [weatherData]);
+        queryClient.refetchQueries(["weather", "temperature"]);
+    };
 
     // locationData && console.log(locationData);
     // weatherData && console.log(weatherData);
@@ -79,16 +84,16 @@ export default function Home() {
                 <Image src="/hotIcon.svg" width={60} height={60} alt="HotSpot" />
             </Link>
             <section css={mainContainer}>
-                <Image css={bgImage} src={"/background.svg"} alt="background" fill />
+                <Image css={bgImage} quality={100} src={"/background.svg"} alt="background" fill />
                 {weatherLoading ? (
-                    <Image css={weatherIcon} src={"/맑음.svg"} alt="sun" width={90} height={90} />
+                    <Image css={weatherIcon} quality={100} src={"/맑음.svg"} alt="sun" width={90} height={90} />
                 ) : weatherData?.rain_pre === "-" ? (
-                    <Image css={weatherIcon} src={`/${weatherData?.sky_stts}.svg`} alt="sun" width={90} height={90} />
+                    <Image css={weatherIcon} quality={100} src={`/${weatherData?.sky_stts}.svg`} alt="sun" width={90} height={90} />
                 ) : (
                     <Image css={weatherIcon} src={"/rain.svg"} alt="etc" width={90} height={90} />
                 )}
                 <div css={iconList}>
-                    <button css={resetIcon}>
+                    <button css={resetIcon} onClick={resetAndRefetchQuery}>
                         <Image src="/reset.svg" alt="리셋" width={25} height={25} />
                     </button>
                     <Link href="/setting">
@@ -117,7 +122,7 @@ export default function Home() {
                         )
                     )}
                 </article>
-                <Image css={character} src="/man.svg" alt="설정" width={282} height={211} />
+                <Image quality={100} css={character} src="/man.svg" alt="설정" width={282} height={211} />
             </section>
             <section css={detailContainer}>
                 {weatherLoading ? (
