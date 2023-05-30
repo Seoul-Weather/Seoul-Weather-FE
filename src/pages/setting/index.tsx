@@ -1,8 +1,15 @@
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Setting() {
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!localStorage.getItem("name")) router.replace("/");
+    }, []);
     return (
         <div css={container}>
             <h1 css={header}>설정</h1>

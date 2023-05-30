@@ -10,6 +10,7 @@ import { Detail } from "@/components/Detail";
 
 import { Loader } from "@/components/Loader";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 interface WeatherData {
     gu: string;
@@ -39,6 +40,12 @@ export interface TempData {
 
 export default function Home() {
     const queryClient = useQueryClient();
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!localStorage.getItem("name")) router.replace("/");
+    }, []);
 
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],

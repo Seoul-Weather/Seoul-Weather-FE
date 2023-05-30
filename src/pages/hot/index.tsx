@@ -6,6 +6,8 @@ import { css } from "@emotion/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export interface IData {
     event: string;
@@ -16,6 +18,12 @@ export interface IData {
 }
 
 export default function Hot() {
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!localStorage.getItem("name")) router.replace("/");
+    }, []);
+
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
