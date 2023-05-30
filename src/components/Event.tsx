@@ -2,9 +2,10 @@ import { IData } from "@/pages/hot";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Event = ({ props }: { props: IData }) => {
-    const { event, time, type } = props;
+    const { event, time, type, intro, page } = props;
     let photo = "공연";
     if (type.includes("축제")) photo = "축제";
     if (type.includes("전시")) photo = "전시";
@@ -12,22 +13,22 @@ export const Event = ({ props }: { props: IData }) => {
     if (type.includes("영화")) photo = "영화";
 
     return (
-        <article css={spot}>
+        <Link href={page} css={spot}>
             <div css={thumbnailWrapper}>
                 <Image css={thumbnail} src={`/${photo}.svg`} alt="thumbnail" fill />
             </div>
             <section css={caption}>
                 <h4 css={title}>{event}</h4>
-                {/* <span css={context}>{address}</span> */}
+                <span css={context}>{intro}</span>
                 <span css={context}>{time}</span>
             </section>
-        </article>
+        </Link>
     );
 };
 
 const spot = css`
     width: 100%;
-    height: 31vh;
+    height: 34vh;
     border: none;
     /* border: 1px solid brown; */
     border-radius: 10px;
@@ -38,7 +39,7 @@ const spot = css`
 
 const thumbnailWrapper = css`
     width: 100%;
-    height: 64%;
+    height: 60%;
     position: relative;
 `;
 
@@ -51,14 +52,13 @@ const thumbnail = css`
 
 const caption = css`
     width: 100%;
-    height: 36%;
+    height: 40%;
     border: none;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
-    padding-left: 0.8rem;
-    border-top: 1px solid brown; //test
+    padding: 0.8rem;
 `;
 
 const title = css``;
