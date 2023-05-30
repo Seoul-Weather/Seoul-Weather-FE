@@ -86,11 +86,18 @@ export default function Home() {
             <section css={mainContainer}>
                 <Image css={bgImage} quality={100} src={"/background.svg"} alt="background" fill />
                 {weatherLoading ? (
-                    <Image css={weatherIcon} quality={100} src={"/맑음.svg"} alt="sun" width={90} height={90} />
+                    <Image css={weatherIcon(true)} quality={100} src={"/맑음.svg"} alt="sun" width={90} height={90} />
                 ) : weatherData?.rain_pre === "-" ? (
-                    <Image css={weatherIcon} quality={100} src={`/${weatherData?.sky_stts}.svg`} alt="sun" width={90} height={90} />
+                    <Image
+                        css={weatherIcon(weatherData?.sky_stts === "맑음" || weatherData?.sky_stts === "구름많음")}
+                        quality={100}
+                        src={`/${weatherData?.sky_stts}.svg`}
+                        alt="sun"
+                        width={90}
+                        height={90}
+                    />
                 ) : (
-                    <Image css={weatherIcon} src={"/rain.svg"} alt="etc" width={90} height={90} />
+                    <Image css={weatherIcon(false)} src={"/rain.svg"} alt="etc" width={90} height={90} />
                 )}
                 <div css={iconList}>
                     <button css={resetIcon} onClick={resetAndRefetchQuery}>
@@ -198,10 +205,11 @@ const bgImage = css`
     z-index: -1;
 `;
 
-const weatherIcon = css`
+const weatherIcon = (isSun: boolean) => css`
     position: absolute;
     top: 70px;
     left: 5%;
+    border-radius: ${isSun ? "50%" : 0};
 `;
 
 const iconList = css`
