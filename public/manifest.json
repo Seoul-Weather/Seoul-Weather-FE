@@ -1,0 +1,50 @@
+{
+    "theme_color": "#5e4036",
+    "background_color": "#5e4036",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "날씨가 어떻든",
+    "short_name": "날씨가 어떻든",
+    "icons": [
+        {
+            "src": "/maskable_icon_x48.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        },
+        {
+            "src": "/maskable_icon_x72.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/maskable_icon_x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "/maskable_icon_x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "/maskable_icon_x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/maskable_icon_x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/maskable_icon_x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "web_app_manifest": {
+        "applicationServerKey": "%NEXT_PUBLIC_VAPID_PUBLIC_KEY%"
+    }
+}
