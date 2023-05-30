@@ -86,6 +86,17 @@ export default function Home() {
 
         queryClient.refetchQueries(["weather", "temperature"]);
     };
+    const username = localStorage.getItem("name");
+    const items =
+        weatherData &&
+        weatherData.item.map((value) => {
+            if (value === "sunglass") return "선글라스";
+            if (value === "suncream") return "썬크림";
+            if (value === "umbrella") return "우산";
+            if (value === "mask") return "마스크";
+        });
+
+    const comment = weatherData && weatherData.item.length ? `${username}님, 외출할 때 ${items?.join(",")} 꼭 챙기세요!` : `${username}님, 오늘은 준비물이 없어요. 좋은하루 보내세요!`;
 
     // locationData && console.log(locationData);
     // weatherData && console.log(weatherData);
@@ -134,18 +145,21 @@ export default function Home() {
                                             {parseInt(weatherData.temp)}
                                             <sup css={unit}>&deg;C</sup>
                                         </h1>
-                                        <article css={itemList}>
-                                            {weatherData.item.length ? (
-                                                weatherData.item.map((itemName: string) => <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />)
-                                            ) : (
-                                                <div>오늘은 준비물이 없네요!</div>
-                                            )}
-                                        </article>
+                                        {weatherData.item.length ? (
+                                            <article css={itemList}>
+                                                {weatherData.item.map((itemName: string) => (
+                                                    <Image key={itemName} css={item} src={`/${itemName}.svg`} alt="item" height={49} width={73} />
+                                                ))}
+                                            </article>
+                                        ) : null}
                                     </>
                                 )
                             )}
                         </article>
-                        <Image quality={100} css={character} src="/man.svg" alt="설정" width={282} height={211} />
+                        <div css={character}>
+                            <div css={ballon}>{comment}</div>
+                            <Image quality={100} src="/man.svg" alt="설정" width={282} height={211} />
+                        </div>
                     </section>
                     <section css={detailContainer}>
                         {weatherLoading ? (
@@ -285,8 +299,80 @@ const itemList = css`
 
 const item = css``;
 
+const ballon = css`
+    /* display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: flex-end;
+  
+    margin-bottom: 5%;
+    color: black;
+    border-radius: 5px;
+   
+    z-index: 21; */
+    width: 230px;
+    height: 70px;
+    background: ${theme.color.white};
+    opacity: 0.9;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 0 12.8px;
+    z-index: 21;
+    left: -20px;
+    top: -80px;
+    position: absolute;
+
+    border-radius: 15px;
+    border: 1px solid #cfd7dd;
+
+    &:after {
+        /* content: "";
+        border-top: 10px solid ${theme.color.white};
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 0px solid transparent;
+
+
+
+        margin-top: 10px; */
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 58px;
+        width: 0;
+        height: 0;
+        border: 10px solid transparent;
+        border-top: 10px solid ${theme.color.white};
+        border-bottom: 0;
+        margin-left: -10px;
+        margin-bottom: -10px;
+    }
+`;
+
+const projectList = css`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 170px;
+    z-index: 21;
+    height: 240px;
+    right: 70px;
+    top: 55px;
+    position: absolute;
+
+    border-radius: 0.4em;
+    border: 1px solid #cfd7dd;
+
+    &:after {
+    }
+`;
+
 const character = css`
     margin-bottom: 20%;
+    position: relative;
 `;
 
 const detailContainer = css`
