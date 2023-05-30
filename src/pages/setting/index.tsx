@@ -25,7 +25,7 @@ export default function Setting() {
                     알림 시간 변경
                 </Link>
                 <Link css={link} href="">
-                    `` 캐릭터 설정 (추후 업데이트 예정)
+                    캐릭터 설정 (추후 업데이트 예정)
                 </Link>
                 <Link css={link} href="">
                     배경 설정 (추후 업데이트 예정)
@@ -46,7 +46,7 @@ export default function Setting() {
                     <span css={version}>버전 정보</span>
                     <span css={versionInfo}>v1.0.0</span>
                 </div>
-                <Link css={link} href="">
+                <Link css={link} href="setting/qna">
                     문의하기
                 </Link>
                 <Link css={link} href="">
