@@ -129,7 +129,7 @@ export default function Home() {
                                 <div css={detailInfoName}>상세 날씨</div>
                                 <article css={detailInfoSmallBox}>
                                     <Detail img="highTemp" title="최고온도" value={weatherData.max_tmp} unit="℃" />
-                                    <Detail img="lowTemp" title="최저온도" value={weatherData.max_tmp} unit="℃" />
+                                    <Detail img="lowTemp" title="최저온도" value={weatherData.min_tmp} unit="℃" />
                                     <Detail img="humanTemp" title="체감온도" value={weatherData.temp} unit="℃" />
                                     <Detail img="uv" title="자외선지수" value={weatherData.uv} unit="" />
                                 </article>
