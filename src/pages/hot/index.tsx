@@ -3,7 +3,7 @@ import { Loader } from "@/components/Loader";
 import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,6 +11,8 @@ export interface IData {
     event: string;
     time: string;
     type: string;
+    intro: string;
+    page: string;
 }
 
 export default function Hot() {
@@ -35,13 +37,23 @@ export default function Hot() {
     });
     data && console.log(data);
 
+    const queryClient = useQueryClient();
+
+    const resetAndRefetchQuery = async () => {
+        await queryClient.resetQueries(["coordinates"]);
+        await queryClient.resetQueries(["location"]);
+        await queryClient.resetQueries(["hotSpot"]);
+
+        queryClient.refetchQueries(["hotSpot"]);
+    };
+
     return (
         <div css={container(isLoading)}>
             <div css={iconList}>
                 <Link href="/home">
                     <Image src="/home.svg" alt="설정" width={25} height={25} />
                 </Link>
-                <button css={resetIcon}>
+                <button css={resetIcon} onClick={resetAndRefetchQuery}>
                     <Image src="/reset.svg" alt="리셋" width={25} height={25} />
                 </button>
             </div>
