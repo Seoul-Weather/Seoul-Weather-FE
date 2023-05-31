@@ -1,7 +1,7 @@
 import { saveSubscription } from "../../utils/db";
 
 const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-const privateVapidKey = process.env.VAPID_PRIVATE_KEY;
+const privateVapidKey = process.env.NEXT_PUBLIC_VAPID_PRIVATE_KEY;
 
 export default async function handler(req, res) {
     if (req.method === "POST") {
