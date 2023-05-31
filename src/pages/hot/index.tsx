@@ -62,14 +62,17 @@ export default function Hot() {
                 <ServerError />
             ) : (
                 <div css={container(isLoading)}>
-                    <div css={iconList}>
-                        <Link href="/home">
-                            <Image src="/home.svg" alt="설정" width={25} height={25} />
-                        </Link>
-                        <button css={resetIcon} onClick={resetAndRefetchQuery}>
-                            <Image src="/reset.svg" alt="리셋" width={25} height={25} />
-                        </button>
-                    </div>
+                    <header css={header}>
+                        <Image src="hotTitle.svg" alt="title" width={130} height={40} />
+                        <div css={iconList}>
+                            <Link href="/home">
+                                <Image src="/home.svg" alt="설정" width={25} height={25} />
+                            </Link>
+                            <button css={resetIcon} onClick={resetAndRefetchQuery}>
+                                <Image src="/reset.svg" alt="리셋" width={25} height={25} />
+                            </button>
+                        </div>
+                    </header>
                     {isLoading ? (
                         <>
                             <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
@@ -88,20 +91,29 @@ const container = (isLoading: boolean) => css`
     width: 100vw;
     height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: ${isLoading ? "center" : "flex-start"};
+    flex-direction: column;
+    align-items: center;
+    justify-content: ${isLoading ? "center" : "flex-start"};
     position: relative;
 `;
 
-const iconList = css`
+const header = css`
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    background-color: #fff;
+    padding: 15px;
+`;
+
+const iconList = css`
+    width: 40%;
     height: auto;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 15px;
-    position: absolute;
-    top: 5px;
+
     gap: 5px;
 `;
 
@@ -121,7 +133,8 @@ const spotList = css`
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 2vh;
+    padding-top: 4vh;
+
     gap: 2vh;
     margin-top: 50px;
 `;
