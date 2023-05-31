@@ -1,5 +1,6 @@
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -17,7 +18,17 @@ export default function Setting() {
     };
     return (
         <div css={container}>
-            <h1 css={header}>설정</h1>
+            <header css={headerWrapper}>
+                <Link href="/home">
+                    <Image src="/back.svg" width={40} height={40} alt="back" />
+                </Link>
+                <h1 css={header}>설정</h1>
+                <div
+                    css={css`
+                        width: 40px;
+                    `}
+                ></div>
+            </header>
 
             <section css={section}>
                 <strong css={sectionHeader}>앱 설정</strong>
@@ -73,13 +84,21 @@ const container = css`
     gap: 35px;
 `;
 
+const headerWrapper = css`
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+    padding: 0 15px;
+    justify-content: space-between;
+    align-items: center;
+`;
+
 const header = css`
     font-size: ${theme.fontSize.h2};
-    margin-top: 25px;
-    margin-left: 10px;
+    width: 100%;
     text-align: left;
-    width: 90%;
 `;
+
 const section = css`
     width: 90%;
     border: 1px solid ${theme.color.grey_light};
