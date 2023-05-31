@@ -36,10 +36,10 @@ export default function Setting() {
                     알림 시간 변경
                 </Link>
                 <Link css={link} href="">
-                    캐릭터 설정 (추후 업데이트 예정)
+                    캐릭터 설정
                 </Link>
                 <Link css={link} href="">
-                    배경 설정 (추후 업데이트 예정)
+                    배경 설정
                 </Link>
             </section>
             <section css={section}>
