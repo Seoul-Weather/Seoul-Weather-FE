@@ -27,8 +27,8 @@ export const AuthBottomSheet = ({ isSheet, setIsSheet }: IProps) => {
     });
 
     const onClick = () => {
-        subscribeUser();
-        sendNotification();
+        // subscribeUser();
+        // sendNotification();
         setIsSheet(false);
     };
 
