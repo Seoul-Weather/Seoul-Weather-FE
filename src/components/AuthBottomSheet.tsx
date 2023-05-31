@@ -5,7 +5,7 @@ import { theme } from "@/styles/theme";
 import { Notification, notiText } from "./Notification";
 import { useQuery } from "@tanstack/react-query";
 import { getCoordinates, getLocation } from "@/hooks/api";
-import { sendNotification, subscribeUser } from "@/pages";
+// import { sendNotification, subscribeUser } from "@/pages";
 
 interface IProps {
     isSheet: boolean;
