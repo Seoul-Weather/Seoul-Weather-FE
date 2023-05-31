@@ -16,12 +16,14 @@ export const AuthBottomSheet = ({ isSheet, setIsSheet }: IProps) => {
     const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
         queryKey: ["coordinates"],
         queryFn: getCoordinates,
+        staleTime: 60000,
     });
 
     const { data: locationData, isLoading: locationLoading } = useQuery({
         queryKey: ["location"],
         queryFn: () => getLocation(coordsData),
         enabled: !!coordsData,
+        staleTime: 60000,
     });
 
     const onClick = () => {
