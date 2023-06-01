@@ -48,6 +48,7 @@ const ripple = css`
     position: relative;
     width: 80px;
     height: 80px;
+    z-index: 10;
     div {
         position: absolute;
         border: 4px solid ${theme.color.primary};

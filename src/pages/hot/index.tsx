@@ -105,6 +105,7 @@ const header = css`
     position: fixed;
     background-color: #fff;
     padding: 15px;
+    z-index: 2;
 `;
 
 const iconList = css`
@@ -113,7 +114,6 @@ const iconList = css`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
     gap: 5px;
 `;
 
@@ -124,6 +124,7 @@ const resetIcon = css`
 
 const loadingImg = css`
     object-fit: cover;
+    z-index: 3;
 `;
 
 const spotList = css`
