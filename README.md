@@ -13,4 +13,4 @@ Typescript|`5.0.4`|
 Emotion|`11.11.0`|
 
 
-![소개 화면](https://github.com/Seoul-Weather/Seoul-Weather-FE/assets/87116017/08925017-c6eb-4412-b924-a8bddfb5308e)
+<img src="https://github.com/Seoul-Weather/Seoul-Weather-FE/assets/87116017/08925017-c6eb-4412-b924-a8bddfb5308e" width="600px"/>
