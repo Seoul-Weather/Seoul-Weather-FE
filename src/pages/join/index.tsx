@@ -1,12 +1,12 @@
-import { AuthBottomSheet } from "@/components/AuthBottomSheet";
-import { Notification, notiText } from "@/components/Notification";
-import { SubmitButton } from "@/components/SubmitButton";
+import { AuthBottomSheet } from "@/components/join/AuthBottomSheet";
+import { Notification, notiText } from "@/components/join/Notification";
+import { SubmitButton } from "@/components/join/SubmitButton";
 
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
-import Image from "next/image";
+
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export default function Join() {
     const [nickname, setNickname] = useState("");

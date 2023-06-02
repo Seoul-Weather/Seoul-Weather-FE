@@ -1,4 +1,4 @@
-import { SubmitButton } from "@/components/SubmitButton";
+import { SubmitButton } from "@/components/join/SubmitButton";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";

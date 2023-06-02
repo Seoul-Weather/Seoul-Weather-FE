@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCoordinates, getLocation, getTemp, getWeather } from "@/hooks/api";
 import { theme } from "@/styles/theme";
-import { Chart } from "@/components/Chart";
-import { Detail } from "@/components/Detail";
-import { Loader } from "@/components/Loader";
+import { Chart } from "@/components/home/Chart";
+import { Detail } from "@/components/home/Detail";
+import { Loader } from "@/components/layout/Loader";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import ServerError from "@/components/ServerError";
+import ServerError from "@/components/layout/ServerError";
 
 interface WeatherData {
     gu: string;

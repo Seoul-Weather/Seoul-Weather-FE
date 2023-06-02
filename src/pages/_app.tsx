@@ -1,4 +1,4 @@
-import { Desktop } from "@/components/Desktop";
+import { Desktop } from "@/components/layout/Desktop";
 import { MediaQuery } from "@/hooks/mediaQuery";
 import "@/styles/globals.css";
 

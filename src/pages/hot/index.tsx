@@ -1,6 +1,6 @@
-import { Event } from "@/components/Event";
-import { Loader } from "@/components/Loader";
-import ServerError from "@/components/ServerError";
+import { Event } from "@/components/hot/Event";
+import { Loader } from "@/components/layout/Loader";
+import ServerError from "@/components/layout/ServerError";
 import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
