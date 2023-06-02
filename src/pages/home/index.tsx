@@ -13,7 +13,8 @@ import { useCoordsQuery } from "@/hooks/queries/useCoordsQuery";
 import { useLocationQuery } from "@/hooks/queries/useLocationQuery";
 import { useWeatherQuery } from "@/hooks/queries/useWeatherQuery";
 import { useForecastQuery } from "@/hooks/queries/useForecastQuery";
-import { useRefetch } from "@/hooks/useRefetch";
+
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Home() {
     const router = useRouter();
@@ -41,6 +42,17 @@ export default function Home() {
     const temp = tempData && tempData.map((value) => Number(value.TEMP));
     const high = temp && Math.max(...temp);
     const low = temp && Math.min(...temp);
+    const queryClient = useQueryClient();
+    const useRefetch = async () => {
+        await queryClient.resetQueries(["coordinates"]);
+        await queryClient.resetQueries(["location"]);
+        await queryClient.resetQueries(["weather"]);
+        await queryClient.resetQueries(["temperature"]);
+        await queryClient.resetQueries(["hotSpot"]);
+
+        queryClient.refetchQueries(["weather", "temperature"]);
+        queryClient.refetchQueries(["hotSpot"]);
+    };
 
     return (
         <>
