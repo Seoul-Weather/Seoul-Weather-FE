@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
+        "build": "ANALYZE=true NODE_ENV=production next build",
         "start": "next start",
         "lint": "next lint",
         "json": "json-server --watch db.json --port 4000"
@@ -12,6 +12,7 @@
     "dependencies": {
         "@emotion/css": "^11.11.0",
         "@emotion/react": "^11.11.0",
+        "@next/bundle-analyzer": "^13.4.4",
         "@qve-ui/qds": "^1.0.1",
         "@tanstack/react-query": "^4.29.7",
         "@tanstack/react-query-devtools": "^4.29.7",
@@ -19,6 +20,7 @@
         "@types/react": "18.2.6",
         "@types/react-dom": "18.2.4",
         "apexcharts": "^3.40.0",
+        "cross-env": "^7.0.3",
         "eslint": "8.41.0",
         "eslint-config-next": "13.4.3",
         "next": "13.4.3",

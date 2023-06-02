@@ -39,3 +39,7 @@ next-env.d.ts
 
 #server
 db.json
+
+# sw
+sw.js.map
+worker-development.js
