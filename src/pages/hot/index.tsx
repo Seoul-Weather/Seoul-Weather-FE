@@ -1,85 +1,63 @@
 import { Event } from "@/components/hot/Event";
 import { Loader } from "@/components/layout/Loader";
 import ServerError from "@/components/layout/ServerError";
-import { getCoordinates, getLocation, getSpot } from "@/hooks/api";
-import { theme } from "@/styles/theme";
+import { useCoordsQuery } from "@/hooks/queries/useCoordsQuery";
+import { useEventQuery } from "@/hooks/queries/useEventQuery";
+import { useLocationQuery } from "@/hooks/queries/useLocationQuery";
+
 import { css } from "@emotion/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-export interface IData {
-    event: string;
-    time: string;
-    type: string;
-    intro: string;
-    page: string;
-}
-
 export default function Hot() {
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (!localStorage.getItem("name")) router.replace("/");
     }, []);
 
-    const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
-        queryKey: ["coordinates"],
-        queryFn: getCoordinates,
-        staleTime: 600000,
-    });
-
-    const { data: locationData, isLoading: locationLoading } = useQuery({
-        queryKey: ["location"],
-        queryFn: () => getLocation(coordsData),
-        enabled: !!coordsData,
-        select: (location) => location.documents[0].region_2depth_name,
-        staleTime: 600000,
-    });
-
-    const { data, isLoading, isError } = useQuery<IData[]>({
-        queryKey: ["hotSpot"],
-        queryFn: () => getSpot(locationData),
-        enabled: !!locationData,
-    });
-    data && console.log(data);
-
-    const queryClient = useQueryClient();
-
-    const resetAndRefetchQuery = async () => {
+    const { data: coordsData } = useCoordsQuery();
+    const { data: locationData } = useLocationQuery(coordsData);
+    const { data: eventData, isLoading: eventLoading, isError: eventError } = useEventQuery(locationData);
+    const useRefetch = async () => {
         await queryClient.resetQueries(["coordinates"]);
         await queryClient.resetQueries(["location"]);
+        await queryClient.resetQueries(["weather"]);
+        await queryClient.resetQueries(["temperature"]);
         await queryClient.resetQueries(["hotSpot"]);
 
+        queryClient.refetchQueries(["weather", "temperature"]);
         queryClient.refetchQueries(["hotSpot"]);
     };
 
     return (
         <>
-            {isError ? (
+            {eventError ? (
                 <ServerError />
             ) : (
-                <div css={container(isLoading)}>
+                <div css={container(eventLoading)}>
                     <header css={header}>
                         <Image src="hotTitle.svg" alt="title" width={130} height={40} />
                         <div css={iconList}>
                             <Link href="/home">
                                 <Image src="/home.svg" alt="설정" width={25} height={25} />
                             </Link>
-                            <button css={resetIcon} onClick={resetAndRefetchQuery}>
+                            <button css={resetIcon} onClick={useRefetch}>
                                 <Image src="/reset.svg" alt="리셋" width={25} height={25} />
                             </button>
                         </div>
                     </header>
-                    {isLoading ? (
+                    {eventLoading ? (
                         <>
                             <Image css={loadingImg} src="/loading.svg" fill alt="loading" />
                             <Loader />
                         </>
                     ) : (
-                        <section css={spotList}>{data && data.map((value) => <Event key={value.event} props={value} />)}</section>
+                        <section css={spotList}>{eventData && eventData.map((value) => <Event key={value.event} props={value} />)}</section>
                     )}
                 </div>
             )}

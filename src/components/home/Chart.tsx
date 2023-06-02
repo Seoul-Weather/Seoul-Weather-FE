@@ -1,4 +1,4 @@
-import { TempData } from "@/pages/home";
+import { TempData } from "@/hooks/queries/useForecastQuery";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";
