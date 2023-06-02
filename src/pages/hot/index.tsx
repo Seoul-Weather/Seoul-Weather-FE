@@ -26,11 +26,8 @@ export default function Hot() {
     const useRefetch = async () => {
         await queryClient.resetQueries(["coordinates"]);
         await queryClient.resetQueries(["location"]);
-        await queryClient.resetQueries(["weather"]);
-        await queryClient.resetQueries(["temperature"]);
         await queryClient.resetQueries(["hotSpot"]);
 
-        queryClient.refetchQueries(["weather", "temperature"]);
         queryClient.refetchQueries(["hotSpot"]);
     };
 

@@ -48,10 +48,8 @@ export default function Home() {
         await queryClient.resetQueries(["location"]);
         await queryClient.resetQueries(["weather"]);
         await queryClient.resetQueries(["temperature"]);
-        await queryClient.resetQueries(["hotSpot"]);
 
         queryClient.refetchQueries(["weather", "temperature"]);
-        queryClient.refetchQueries(["hotSpot"]);
     };
 
     return (
