@@ -3,7 +3,7 @@ import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";
 
-export const Chart = ({ value, high, low }: { value: TempData; high: string; low: string }) => {
+export const Chart = ({ value, high, low }: { value: TempData; high?: number; low?: number }) => {
     const { FCST_DT: time, SKY_STTS: stts, TEMP: temp } = value;
     const [h, l, t] = [Number(high), Number(low), Number(temp)];
     const top = (200 / (h - l)) * (h - t);

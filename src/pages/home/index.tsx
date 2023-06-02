@@ -95,6 +95,9 @@ export default function Home() {
         });
 
     const comment = weatherData && weatherData.item.length ? `${username}님, 외출할 때 ${items?.join(",")} 꼭 챙기세요!` : `${username}님, 오늘은 준비물이 없어요. 좋은하루 보내세요!`;
+    const temp = tempData && tempData.map((value) => Number(value.TEMP));
+    const high = temp && Math.max(...temp);
+    const low = temp && Math.min(...temp);
 
     // locationData && console.log(locationData);
     // weatherData && console.log(weatherData);
@@ -191,9 +194,7 @@ export default function Home() {
                                     <article css={chartWrapper}>
                                         <div css={chartName}>시간대별 일기예보</div>
                                         <div css={chartBox}>
-                                            <section css={chart}>
-                                                {tempData && tempData.map((value) => <Chart key={value.FCST_DT} value={value} high={weatherData.max_tmp} low={weatherData.min_tmp} />)}
-                                            </section>
+                                            <section css={chart}>{tempData && tempData.map((value) => <Chart key={value.FCST_DT} value={value} high={high} low={low} />)}</section>
                                         </div>
                                     </article>
                                 </>
