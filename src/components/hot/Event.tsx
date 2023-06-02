@@ -1,4 +1,4 @@
-import { IData } from "@/pages/hot";
+import { IData } from "@/hooks/queries/useEventQuery";
 import { theme } from "@/styles/theme";
 import { css } from "@emotion/react";
 import Image from "next/image";
