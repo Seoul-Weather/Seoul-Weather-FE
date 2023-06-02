@@ -1,3 +1,3 @@
-export const useLocationQuery = (queryParams) => {
+export const useLocationQuery = (queryParams: any) => {
     return null;
 };

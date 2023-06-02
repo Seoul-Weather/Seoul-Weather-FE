@@ -62,6 +62,7 @@ export default function Home() {
 
     const {
         isLoading: weatherLoading,
+        isFetching: weatherFetching,
         data: weatherData,
         isError,
     } = useQuery<WeatherData>({
@@ -136,7 +137,7 @@ export default function Home() {
                             </Link>
                         </div>
                         <article css={weatherInfo}>
-                            {weatherLoading ? (
+                            {weatherFetching ? (
                                 <Loader />
                             ) : (
                                 weatherData && (
