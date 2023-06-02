@@ -1,90 +1,32 @@
 import { css } from "@emotion/react";
 import Link from "next/link";
 import Image from "next/image";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getCoordinates, getLocation, getTemp, getWeather } from "@/hooks/api";
+
 import { theme } from "@/styles/theme";
 import { Chart } from "@/components/home/Chart";
 import { Detail } from "@/components/home/Detail";
 import { Loader } from "@/components/layout/Loader";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import ServerError from "@/components/layout/ServerError";
-
-interface WeatherData {
-    gu: string;
-    temp: string;
-    sky_stts: string;
-    max_tmp: string;
-    min_tmp: string;
-    rain_pre: string;
-    pm10: string;
-    pm25: string;
-    wind: string;
-    sunset: string;
-    sunrise: string;
-    uv: string;
-    humiditiy: string;
-    item: string[];
-}
-
-export interface TempData {
-    FCST_DT: string;
-    PRECIPITATION: string;
-    PRECPT_TYPE: string;
-    RAIN_CHANCE: string;
-    SKY_STTS: string;
-    TEMP: string;
-}
+import { useCoordsQuery } from "@/hooks/queries/useCoordsQuery";
+import { useLocationQuery } from "@/hooks/queries/useLocationQuery";
+import { useWeatherQuery } from "@/hooks/queries/useWeatherQuery";
+import { useForecastQuery } from "@/hooks/queries/useForecastQuery";
+import { useRefetch } from "@/hooks/useRefetch";
 
 export default function Home() {
-    const queryClient = useQueryClient();
-
     const router = useRouter();
 
     useEffect(() => {
         if (!localStorage.getItem("name")) router.replace("/");
     }, []);
 
-    const { data: coordsData, isLoading: coordsLoading } = useQuery<any>({
-        queryKey: ["coordinates"],
-        queryFn: getCoordinates,
-        staleTime: 600000,
-    });
+    const { data: coordsData } = useCoordsQuery();
+    const { data: locationData } = useLocationQuery(coordsData);
+    const { isLoading: weatherLoading, isFetching: weatherFetching, data: weatherData, isError } = useWeatherQuery(locationData);
+    const { isLoading: tempLoading, data: tempData } = useForecastQuery(locationData);
 
-    const { data: locationData, isLoading: locationLoading } = useQuery({
-        queryKey: ["location"],
-        queryFn: () => getLocation(coordsData),
-        enabled: !!coordsData,
-        select: (location) => location.documents[0].region_2depth_name,
-        staleTime: 600000,
-    });
-
-    const {
-        isLoading: weatherLoading,
-        isFetching: weatherFetching,
-        data: weatherData,
-        isError,
-    } = useQuery<WeatherData>({
-        queryKey: ["weather"],
-        queryFn: () => getWeather(locationData),
-        enabled: !!locationData,
-    });
-
-    const { isLoading: tempLoading, data: tempData } = useQuery<TempData[]>({
-        queryKey: ["temperature"],
-        queryFn: () => getTemp(locationData),
-        enabled: !!locationData,
-    });
-
-    const resetAndRefetchQuery = async () => {
-        await queryClient.resetQueries(["coordinates"]);
-        await queryClient.resetQueries(["location"]);
-        await queryClient.resetQueries(["weather"]);
-        await queryClient.resetQueries(["temperature"]);
-
-        queryClient.refetchQueries(["weather", "temperature"]);
-    };
     const username = localStorage.getItem("name");
     const items =
         weatherData &&
@@ -100,9 +42,6 @@ export default function Home() {
     const high = temp && Math.max(...temp);
     const low = temp && Math.min(...temp);
 
-    // locationData && console.log(locationData);
-    // weatherData && console.log(weatherData);
-    // tempData && console.log(tempData);
     return (
         <>
             {isError ? (
@@ -129,7 +68,7 @@ export default function Home() {
                             <Image css={weatherIcon(false)} src={"/rain.svg"} alt="etc" width={90} height={90} />
                         )}
                         <div css={iconList}>
-                            <button css={resetIcon} onClick={resetAndRefetchQuery}>
+                            <button css={resetIcon} onClick={useRefetch}>
                                 <Image src="/reset.svg" alt="리셋" width={25} height={25} />
                             </button>
                             <Link href="/setting">
